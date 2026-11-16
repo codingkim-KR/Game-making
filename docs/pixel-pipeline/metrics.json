@@ -1,0 +1,18 @@
+{
+ "A  지금 방식: 크게 렌더링(MSAA) 후 축소": {
+  "distinct_opaque_colours": 13535,
+  "semi_transparent_pct": 22.3
+ },
+ "B  최종 크기로 직접 렌더링 (기존 부드러운 명암)": {
+  "distinct_opaque_colours": 1324,
+  "semi_transparent_pct": 0.0
+ },
+ "C  최종 크기 + 명암 3단계 (hero_toon_pixel)": {
+  "distinct_opaque_colours": 39,
+  "semi_transparent_pct": 0.0
+ },
+ "D  C + 반투명 제거 · 팔레트 고정 · 1px 외곽선": {
+  "distinct_opaque_colours": 40,
+  "semi_transparent_pct": 0.0
+ }
+}

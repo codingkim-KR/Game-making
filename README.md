@@ -4,6 +4,8 @@
 
 ## 구성
 - `motion-lab/` — 주인공 이동·전투 전환 연습장 (Godot 4.6.3, v0.5.1 소스). Godot에서 `motion-lab/project.godot`를 가져와 F5로 실행한다.
+- `art/` — 도트 작업 파일(.aseprite).
+- `docs/pixel-pipeline/` — 3D 캡처 → 도트 파이프라인 기록과 비교 결과.
 
 ## 작업 규칙
 - Godot 캐시(`.godot/`)와 원본 캡처 프레임(`capture_raw/`)은 올리지 않는다.
