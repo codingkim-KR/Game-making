@@ -21,7 +21,8 @@ extends SceneTree
 #   --canvas_m=3.4x2.9    capture area in metres (width x height)
 #   --feet_px=12          pixels between the bottom edge and the feet
 #   --msaa=0|2|4|8        3D multisample anti-aliasing (0 = off)
-#   --toon=hard|soft      hard = hero_toon_pixel.gdshader, soft = game shader
+#   --toon=hard|soft|parts  hard = hero_toon_pixel.gdshader, soft = game shader,
+#                         parts = flat limb-segment map for redrawing reference
 #   --trail=0|1           keep the game's sword-tip trail mesh (default off)
 #   --tail=24             extra ticks captured after returning to idle
 #   --out=res://capture_raw/<name>
@@ -121,7 +122,80 @@ func _setup_world() -> Node3D:
 	world.add_child(floor_body)
 	return world
 
+const PART_COLORS := {
+	"torso": Color("8f8f8f"),
+	"upperarm_l": Color("2f5fd0"), "lowerarm_l": Color("5c96ff"), "hand_l": Color("a9d0ff"),
+	"upperarm_r": Color("c8382e"), "lowerarm_r": Color("ff6f58"), "hand_r": Color("ffb3a3"),
+	"thigh_l": Color("23874b"), "calf_l": Color("4fc47e"), "foot_l": Color("aef0c6"),
+	"thigh_r": Color("a5701a"), "calf_r": Color("dba23a"), "foot_r": Color("ffdc92"),
+}
+const HEAD_MESHES := ["HeroB_AshBlondHair", "HeroB_Eyebrows", "HeroB_Eyes", "HeroB_Head"]
+
+func _part_of(bone: String) -> String:
+	for side in ["_l", "_r"]:
+		if bone.ends_with(side) or bone.ends_with("_leaf" + side):
+			if bone.begins_with("upperarm"): return "upperarm" + side
+			if bone.begins_with("lowerarm"): return "lowerarm" + side
+			if bone.begins_with("thigh"): return "thigh" + side
+			if bone.begins_with("calf"): return "calf" + side
+			if bone.begins_with("foot") or bone.begins_with("ball"): return "foot" + side
+			if bone.begins_with("clavicle"): return "torso"
+			return "hand" + side  # hand and finger bones
+	return "torso"
+
+func _parts_map(node: Node) -> void:
+	# Reference pass for redrawing: every body vertex takes the colour of the
+	# limb segment its strongest bone belongs to (left = blue/green family,
+	# right = red/orange family), so near and far limbs never merge. Head
+	# meshes keep their flat material colours so the face layout stays visible.
+	if node is MeshInstance3D and (node as MeshInstance3D).skin != null:
+		var mi := node as MeshInstance3D
+		var keep_material := String(mi.name) in HEAD_MESHES
+		var skin: Skin = mi.skin
+		var skel := mi.get_node(mi.skeleton) as Skeleton3D
+		var src: Mesh = mi.mesh
+		var dst := ArrayMesh.new()
+		for s in range(src.get_surface_count()):
+			var arrays: Array = src.surface_get_arrays(s)
+			var bones: PackedInt32Array = arrays[Mesh.ARRAY_BONES]
+			var weights: PackedFloat32Array = arrays[Mesh.ARRAY_WEIGHTS]
+			var n: int = (arrays[Mesh.ARRAY_VERTEX] as PackedVector3Array).size()
+			var per: int = bones.size() / maxi(n, 1)
+			var base := Color(0.7, 0.7, 0.7)
+			var orig := mi.get_active_material(s)
+			if orig is ShaderMaterial:
+				base = orig.get_shader_parameter("base_color")
+			var cols := PackedColorArray()
+			cols.resize(n)
+			for v in range(n):
+				if keep_material:
+					cols[v] = base
+					continue
+				var best := 0
+				for k in range(per):
+					if weights[v * per + k] > weights[v * per + best]:
+						best = k
+				var bind := bones[v * per + best]
+				var bone_name := String(skin.get_bind_name(bind))
+				if bone_name == "" and skel:
+					bone_name = skel.get_bone_name(skin.get_bind_bone(bind))
+				cols[v] = PART_COLORS[_part_of(bone_name)]
+			arrays[Mesh.ARRAY_COLOR] = cols
+			dst.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays, [], {}, src.surface_get_format(s) & Mesh.ARRAY_FORMAT_BLEND_SHAPE_MASK)
+			var flat := StandardMaterial3D.new()
+			flat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+			flat.vertex_color_use_as_albedo = true
+			dst.surface_set_material(s, flat)
+		mi.mesh = dst
+		for s in range(dst.get_surface_count()):
+			mi.set_surface_override_material(s, null)
+	for c in node.get_children():
+		_parts_map(c)
+
 func _swap_toon() -> void:
+	if String(opts.toon) == "parts":
+		_parts_map(hero.model)
+		return
 	if String(opts.toon) != "hard":
 		return
 	for mat in hero.materials:
