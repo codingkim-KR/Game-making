@@ -1,0 +1,2868 @@
+{
+  "version": "0.5",
+  "title": "검은 성전 이동 전투 모션 및 전환 설계",
+  "date": "2026-11-15",
+  "status": "설계 확정안; 애니메이션·조작 구현 완료를 뜻하지 않음",
+  "fps": 60,
+  "schema_scope": "authoring design catalog; not a directly loadable engine implementation",
+  "canon_changes": [
+    "쌍검을 세검으로 교체",
+    "일반검 3타 및 대검 4타의 기존 동작 방향 유지",
+    "세검 4타를 신규 제작"
+  ],
+  "frame_convention": "0-based integer simulation ticks; intervals [start,end); hitstop ticks excluded from action elapsed time",
+  "state_axes": {
+    "support": [
+      "ground",
+      "air",
+      "wall",
+      "ledge"
+    ],
+    "rope": [
+      "none",
+      "firing",
+      "slack",
+      "taut"
+    ],
+    "action": [
+      "free",
+      "attack_startup",
+      "attack_active",
+      "attack_recovery",
+      "charge",
+      "guard",
+      "parry",
+      "dodge",
+      "hurt",
+      "interact",
+      "dead"
+    ],
+    "weapon": [
+      "S",
+      "G",
+      "R"
+    ],
+    "separate_values": [
+      "input_direction",
+      "facing",
+      "horizontal_velocity",
+      "attack_direction",
+      "visible_pose_direction",
+      "support_foot_phase"
+    ]
+  },
+  "input": {
+    "general_buffer_f": 6,
+    "coyote_f": 6,
+    "combo_reservations": 1,
+    "combo_rule": "light edge during active/recovery may reserve one next combo until the current action first allows it; expires if action interrupted",
+    "same_tick_free_priority": [
+      "jump/detach",
+      "dodge",
+      "attack",
+      "guard",
+      "grapple",
+      "swap",
+      "interact"
+    ],
+    "jump_attack_same_tick": "resolve jump/detach once, then choose aerial attack"
+  },
+  "mobility": {
+    "default_double_jump": false,
+    "air_dodges_per_flight": 1,
+    "stable_floor_ticks_to_refill": 2,
+    "wall_regrab_lock_f": 12,
+    "wall_push_protection_f": 6,
+    "same_wall_climb_allowed": true,
+    "wall_rope_ledge_refill": false,
+    "wire_style": "fixed anchor, fixed length, constrained pendulum",
+    "wire_ground_slack_jump": "grounded jump retains slack rope; airborne jump releases either slack or taut rope without extra launch velocity",
+    "immediate_rejump_refill_exception": "validated downward-to-upward floor contact may refill once on that event before buffered immediate jump; wall/ledge/slope side contact excluded",
+    "air_attacks_have_per_flight_budget": false,
+    "air_chain_rearm_after_full_recovery_f": 6,
+    "attack_lock_persists_across_support_changes": true,
+    "ground_dodge_duration_f": 22,
+    "ground_dodge_attack_cancel_elapsed_f": 14,
+    "ground_dodge_iframe_interval": [
+      2,
+      10
+    ],
+    "air_dodge_duration_f": 18,
+    "air_dodge_attack_cancel_elapsed_f": 12,
+    "air_dodge_iframe_interval": [
+      2,
+      8
+    ],
+    "air_chain_lengths": {
+      "S": 2,
+      "G": 1,
+      "R": 2
+    },
+    "plunge_finisher": true,
+    "weapon_swap_resets_recovery": false,
+    "wire_ground_attack": "release then grounded action, never an aerial attack",
+    "attachment_exclusion": "while rope attached do not auto-grab wall or ledge; detach input cannot also walljump in same tick"
+  },
+  "hitstop": {
+    "world_policy": "combat-world simulation paused, including rope/actors/projectiles; input/UI sampling continues",
+    "max_f_per_event": 7,
+    "one_event_per_hit_id": true,
+    "buffer_age_paused": true,
+    "restart_same_contact": false
+  },
+  "initial_timing_only": true,
+  "weapons": {
+    "S": {
+      "name": "일반검",
+      "light": [
+        [
+          5,
+          3,
+          12
+        ],
+        [
+          6,
+          4,
+          14
+        ],
+        [
+          9,
+          5,
+          20
+        ]
+      ],
+      "light_names": [
+        "가로베기",
+        "역베기",
+        "내려베기"
+      ],
+      "walk_light": [
+        1,
+        2
+      ],
+      "air_chain_hits": 2,
+      "cancel_f": 4,
+      "rope": true,
+      "hold": [
+        18,
+        36
+      ]
+    },
+    "G": {
+      "name": "대검",
+      "light": [
+        [
+          12,
+          5,
+          22
+        ],
+        [
+          13,
+          5,
+          25
+        ],
+        [
+          14,
+          5,
+          27
+        ],
+        [
+          18,
+          6,
+          32
+        ]
+      ],
+      "light_names": [
+        "사선베기",
+        "되받아 베기",
+        "몸통 회전 베기",
+        "마무리 내려찍기"
+      ],
+      "walk_light": [],
+      "air_chain_hits": 1,
+      "cancel_f": 10,
+      "rope": false,
+      "hold": [
+        30,
+        60
+      ]
+    },
+    "R": {
+      "name": "세검",
+      "light": [
+        [
+          4,
+          2,
+          9
+        ],
+        [
+          4,
+          2,
+          9
+        ],
+        [
+          5,
+          2,
+          11
+        ],
+        [
+          8,
+          3,
+          17
+        ]
+      ],
+      "light_names": [
+        "정면 찌르기",
+        "낮은 찌르기",
+        "찌르는 선 변경",
+        "깊은 런지"
+      ],
+      "walk_light": [
+        1,
+        2,
+        3
+      ],
+      "air_chain_hits": 2,
+      "cancel_f": 2,
+      "rope": true,
+      "hold": [
+        12,
+        30
+      ]
+    }
+  },
+  "attacks": [
+    {
+      "id": "S_LIGHT_1",
+      "weapon": "S",
+      "startup_f": 5,
+      "active_f": 3,
+      "recovery_f": 12,
+      "total_f": 20,
+      "frame_origin": 0,
+      "active_interval": [
+        5,
+        8
+      ],
+      "interval_end": "exclusive",
+      "cancel_recovery_elapsed_f": 4,
+      "hitstop_f": 3,
+      "startup_cancel_interval": [
+        0,
+        2
+      ],
+      "startup_cancel_actions": [
+        "jump",
+        "dodge"
+      ],
+      "allow_jump_cancel": true,
+      "allow_dodge_cancel": true,
+      "allow_swap_cancel": false,
+      "ground_movement": "walk_blend"
+    },
+    {
+      "id": "S_LIGHT_2",
+      "weapon": "S",
+      "startup_f": 6,
+      "active_f": 4,
+      "recovery_f": 14,
+      "total_f": 24,
+      "frame_origin": 0,
+      "active_interval": [
+        6,
+        10
+      ],
+      "interval_end": "exclusive",
+      "cancel_recovery_elapsed_f": 4,
+      "hitstop_f": 3,
+      "startup_cancel_interval": [
+        0,
+        2
+      ],
+      "startup_cancel_actions": [
+        "jump",
+        "dodge"
+      ],
+      "allow_jump_cancel": true,
+      "allow_dodge_cancel": true,
+      "allow_swap_cancel": false,
+      "ground_movement": "walk_blend"
+    },
+    {
+      "id": "S_LIGHT_3",
+      "weapon": "S",
+      "startup_f": 9,
+      "active_f": 5,
+      "recovery_f": 20,
+      "total_f": 34,
+      "frame_origin": 0,
+      "active_interval": [
+        9,
+        14
+      ],
+      "interval_end": "exclusive",
+      "cancel_recovery_elapsed_f": 4,
+      "hitstop_f": 3,
+      "startup_cancel_interval": [
+        0,
+        2
+      ],
+      "startup_cancel_actions": [
+        "jump",
+        "dodge"
+      ],
+      "allow_jump_cancel": true,
+      "allow_dodge_cancel": true,
+      "allow_swap_cancel": false,
+      "ground_movement": "authored_full_body"
+    },
+    {
+      "id": "G_LIGHT_1",
+      "weapon": "G",
+      "startup_f": 12,
+      "active_f": 5,
+      "recovery_f": 22,
+      "total_f": 39,
+      "frame_origin": 0,
+      "active_interval": [
+        12,
+        17
+      ],
+      "interval_end": "exclusive",
+      "cancel_recovery_elapsed_f": 10,
+      "hitstop_f": 5,
+      "startup_cancel_interval": [
+        0,
+        2
+      ],
+      "startup_cancel_actions": [
+        "jump",
+        "dodge"
+      ],
+      "allow_jump_cancel": true,
+      "allow_dodge_cancel": true,
+      "allow_swap_cancel": false,
+      "ground_movement": "authored_full_body"
+    },
+    {
+      "id": "G_LIGHT_2",
+      "weapon": "G",
+      "startup_f": 13,
+      "active_f": 5,
+      "recovery_f": 25,
+      "total_f": 43,
+      "frame_origin": 0,
+      "active_interval": [
+        13,
+        18
+      ],
+      "interval_end": "exclusive",
+      "cancel_recovery_elapsed_f": 10,
+      "hitstop_f": 5,
+      "startup_cancel_interval": [
+        0,
+        2
+      ],
+      "startup_cancel_actions": [
+        "jump",
+        "dodge"
+      ],
+      "allow_jump_cancel": true,
+      "allow_dodge_cancel": true,
+      "allow_swap_cancel": false,
+      "ground_movement": "authored_full_body"
+    },
+    {
+      "id": "G_LIGHT_3",
+      "weapon": "G",
+      "startup_f": 14,
+      "active_f": 5,
+      "recovery_f": 27,
+      "total_f": 46,
+      "frame_origin": 0,
+      "active_interval": [
+        14,
+        19
+      ],
+      "interval_end": "exclusive",
+      "cancel_recovery_elapsed_f": 10,
+      "hitstop_f": 5,
+      "startup_cancel_interval": [
+        0,
+        2
+      ],
+      "startup_cancel_actions": [
+        "jump",
+        "dodge"
+      ],
+      "allow_jump_cancel": true,
+      "allow_dodge_cancel": true,
+      "allow_swap_cancel": false,
+      "ground_movement": "authored_full_body"
+    },
+    {
+      "id": "G_LIGHT_4",
+      "weapon": "G",
+      "startup_f": 18,
+      "active_f": 6,
+      "recovery_f": 32,
+      "total_f": 56,
+      "frame_origin": 0,
+      "active_interval": [
+        18,
+        24
+      ],
+      "interval_end": "exclusive",
+      "cancel_recovery_elapsed_f": 10,
+      "hitstop_f": 5,
+      "startup_cancel_interval": [
+        0,
+        2
+      ],
+      "startup_cancel_actions": [
+        "jump",
+        "dodge"
+      ],
+      "allow_jump_cancel": true,
+      "allow_dodge_cancel": true,
+      "allow_swap_cancel": false,
+      "ground_movement": "authored_full_body"
+    },
+    {
+      "id": "R_LIGHT_1",
+      "weapon": "R",
+      "startup_f": 4,
+      "active_f": 2,
+      "recovery_f": 9,
+      "total_f": 15,
+      "frame_origin": 0,
+      "active_interval": [
+        4,
+        6
+      ],
+      "interval_end": "exclusive",
+      "cancel_recovery_elapsed_f": 2,
+      "hitstop_f": 2,
+      "startup_cancel_interval": [
+        0,
+        2
+      ],
+      "startup_cancel_actions": [
+        "jump",
+        "dodge"
+      ],
+      "allow_jump_cancel": true,
+      "allow_dodge_cancel": true,
+      "allow_swap_cancel": false,
+      "ground_movement": "walk_blend"
+    },
+    {
+      "id": "R_LIGHT_2",
+      "weapon": "R",
+      "startup_f": 4,
+      "active_f": 2,
+      "recovery_f": 9,
+      "total_f": 15,
+      "frame_origin": 0,
+      "active_interval": [
+        4,
+        6
+      ],
+      "interval_end": "exclusive",
+      "cancel_recovery_elapsed_f": 2,
+      "hitstop_f": 2,
+      "startup_cancel_interval": [
+        0,
+        2
+      ],
+      "startup_cancel_actions": [
+        "jump",
+        "dodge"
+      ],
+      "allow_jump_cancel": true,
+      "allow_dodge_cancel": true,
+      "allow_swap_cancel": false,
+      "ground_movement": "walk_blend"
+    },
+    {
+      "id": "R_LIGHT_3",
+      "weapon": "R",
+      "startup_f": 5,
+      "active_f": 2,
+      "recovery_f": 11,
+      "total_f": 18,
+      "frame_origin": 0,
+      "active_interval": [
+        5,
+        7
+      ],
+      "interval_end": "exclusive",
+      "cancel_recovery_elapsed_f": 2,
+      "hitstop_f": 2,
+      "startup_cancel_interval": [
+        0,
+        2
+      ],
+      "startup_cancel_actions": [
+        "jump",
+        "dodge"
+      ],
+      "allow_jump_cancel": true,
+      "allow_dodge_cancel": true,
+      "allow_swap_cancel": false,
+      "ground_movement": "walk_blend"
+    },
+    {
+      "id": "R_LIGHT_4",
+      "weapon": "R",
+      "startup_f": 8,
+      "active_f": 3,
+      "recovery_f": 17,
+      "total_f": 28,
+      "frame_origin": 0,
+      "active_interval": [
+        8,
+        11
+      ],
+      "interval_end": "exclusive",
+      "cancel_recovery_elapsed_f": 2,
+      "hitstop_f": 2,
+      "startup_cancel_interval": [
+        0,
+        2
+      ],
+      "startup_cancel_actions": [
+        "jump",
+        "dodge"
+      ],
+      "allow_jump_cancel": true,
+      "allow_dodge_cancel": true,
+      "allow_swap_cancel": false,
+      "ground_movement": "authored_full_body"
+    }
+  ],
+  "motions": [
+    {
+      "id": "C_IDLE",
+      "name": "기본 호흡",
+      "group": "지상",
+      "frames_at_60fps": 60,
+      "variants": 1,
+      "kind": "반복",
+      "note": "무기 준비 자세와 조합",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_STAND_TURN",
+      "name": "제자리 방향 전환",
+      "group": "지상",
+      "frames_at_60fps": 6,
+      "variants": 1,
+      "kind": "전환",
+      "note": "머리→어깨→골반→발",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_WALK_START",
+      "name": "걷기 출발",
+      "group": "지상",
+      "frames_at_60fps": 8,
+      "variants": 2,
+      "kind": "전환",
+      "note": "왼발/오른발 선행",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_WALK_LOOP",
+      "name": "걷기 반복",
+      "group": "지상",
+      "frames_at_60fps": 60,
+      "variants": 1,
+      "kind": "반복",
+      "note": "실제 발 접지 곡선에 맞춰 재생",
+      "status": "설계",
+      "reference": "v04 기준 포즈 참고"
+    },
+    {
+      "id": "C_WALK_STOP",
+      "name": "걷기 정지",
+      "group": "지상",
+      "frames_at_60fps": 8,
+      "variants": 2,
+      "kind": "전환",
+      "note": "현재 지지발 유지",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_WALK_TURN",
+      "name": "걷기 반전",
+      "group": "지상",
+      "frames_at_60fps": 6,
+      "variants": 2,
+      "kind": "전환",
+      "note": "지지발 기준 회전",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_WALK_TO_RUN",
+      "name": "걷기에서 달리기",
+      "group": "지상",
+      "frames_at_60fps": 6,
+      "variants": 2,
+      "kind": "전환",
+      "note": "보행 위상 유지",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_RUN_START",
+      "name": "달리기 출발",
+      "group": "지상",
+      "frames_at_60fps": 10,
+      "variants": 2,
+      "kind": "전환",
+      "note": "낮은 중심에서 첫 보폭",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_RUN_LOOP",
+      "name": "달리기 반복",
+      "group": "지상",
+      "frames_at_60fps": 30,
+      "variants": 1,
+      "kind": "반복",
+      "note": "원본 발 접지에 맞춰 길이 조정",
+      "status": "설계",
+      "reference": "v04 기준 포즈 참고"
+    },
+    {
+      "id": "C_RUN_STOP",
+      "name": "달리기 제동",
+      "group": "지상",
+      "frames_at_60fps": 12,
+      "variants": 2,
+      "kind": "전환",
+      "note": "앞발 제동과 몸통 지연",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_RUN_TURN",
+      "name": "달리기 반전",
+      "group": "지상",
+      "frames_at_60fps": 10,
+      "variants": 2,
+      "kind": "전환",
+      "note": "제동→골반 회전→반대 추진",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_RUN_TO_WALK",
+      "name": "달리기에서 걷기",
+      "group": "지상",
+      "frames_at_60fps": 6,
+      "variants": 2,
+      "kind": "전환",
+      "note": "정지 자세를 거치지 않음",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_BACKSTEP_WALK",
+      "name": "방어 중 뒷걸음",
+      "group": "지상",
+      "frames_at_60fps": 40,
+      "variants": 1,
+      "kind": "반복",
+      "note": "시선 유지, 발 교차 금지",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_EDGE_DEPART",
+      "name": "발판에서 걸어 나감",
+      "group": "공중",
+      "frames_at_60fps": 4,
+      "variants": 1,
+      "kind": "전환",
+      "note": "점프 준비 없이 지지 상실",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_JUMP_STAND",
+      "name": "제자리 도약",
+      "group": "공중",
+      "frames_at_60fps": 6,
+      "variants": 1,
+      "kind": "전용",
+      "note": "물리 도약은 입력 처리 즉시; 압축 자세로 지연 금지",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_JUMP_WALK",
+      "name": "보행 중 도약",
+      "group": "공중",
+      "frames_at_60fps": 6,
+      "variants": 2,
+      "kind": "전용",
+      "note": "지지발로 밀기",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_JUMP_RUN",
+      "name": "달리기 도약",
+      "group": "공중",
+      "frames_at_60fps": 6,
+      "variants": 2,
+      "kind": "전용",
+      "note": "한 발 도약과 전방 무릎",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_JUMP_RISE_STILL",
+      "name": "수직 상승",
+      "group": "공중",
+      "frames_at_60fps": 12,
+      "variants": 1,
+      "kind": "반복",
+      "note": "속도 기반 자세",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_JUMP_RISE_MOVE",
+      "name": "전진 상승",
+      "group": "공중",
+      "frames_at_60fps": 12,
+      "variants": 1,
+      "kind": "반복",
+      "note": "수평 관성에 맞춰 몸 기울기",
+      "status": "설계",
+      "reference": "v04 기준 포즈 참고"
+    },
+    {
+      "id": "C_JUMP_APEX",
+      "name": "점프 정점 통과",
+      "group": "공중",
+      "frames_at_60fps": 6,
+      "variants": 1,
+      "kind": "전환",
+      "note": "물리적 정지 구간을 만들지 않음",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_FALL_STILL",
+      "name": "수직 낙하",
+      "group": "공중",
+      "frames_at_60fps": 12,
+      "variants": 1,
+      "kind": "반복",
+      "note": "발을 아래로",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_FALL_MOVE",
+      "name": "이동 낙하",
+      "group": "공중",
+      "frames_at_60fps": 12,
+      "variants": 1,
+      "kind": "반복",
+      "note": "수평 관성과 낙하 속도 반영",
+      "status": "설계",
+      "reference": "v04 기준 포즈 참고"
+    },
+    {
+      "id": "C_AIR_TURN",
+      "name": "공중 방향 전환",
+      "group": "공중",
+      "frames_at_60fps": 6,
+      "variants": 1,
+      "kind": "전환",
+      "note": "속도는 즉시 반전하지 않음",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_CEILING_BUMP",
+      "name": "천장 접촉",
+      "group": "공중",
+      "frames_at_60fps": 6,
+      "variants": 1,
+      "kind": "반응",
+      "note": "상승속도 제거 후 낙하",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_LAND_LIGHT",
+      "name": "가벼운 착지",
+      "group": "착지",
+      "frames_at_60fps": 6,
+      "variants": 1,
+      "kind": "전용",
+      "note": "일반 이동/점프 입력을 막지 않음",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_LAND_MOVE",
+      "name": "이동 착지",
+      "group": "착지",
+      "frames_at_60fps": 8,
+      "variants": 2,
+      "kind": "전용",
+      "note": "한 발 접지 후 보폭 연결",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_LAND_HARD",
+      "name": "강한 착지",
+      "group": "착지",
+      "frames_at_60fps": 14,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최초 8f 행동 잠금, 나머지는 회복 전환 가능",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_LAND_SKID",
+      "name": "고속 착지 제동",
+      "group": "착지",
+      "frames_at_60fps": 10,
+      "variants": 2,
+      "kind": "전용",
+      "note": "속도 방향과 입력에 따라 달리기 또는 정지",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_WALL_CONTACT",
+      "name": "벽 접촉 흡수",
+      "group": "벽",
+      "frames_at_60fps": 6,
+      "variants": 1,
+      "kind": "전용",
+      "note": "왼손과 발로 지지; 무기는 오른손",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_WALL_BRACE",
+      "name": "벽 지지",
+      "group": "벽",
+      "frames_at_60fps": 8,
+      "variants": 1,
+      "kind": "전용",
+      "note": "짧은 지지 뒤 미끄러짐",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_WALL_SLIDE",
+      "name": "벽 미끄러짐",
+      "group": "벽",
+      "frames_at_60fps": 24,
+      "variants": 1,
+      "kind": "반복",
+      "note": "마찰 자세 유지",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_WALL_KICK",
+      "name": "벽차기",
+      "group": "벽",
+      "frames_at_60fps": 10,
+      "variants": 1,
+      "kind": "전용",
+      "note": "6f 동안 벽 바깥쪽 추진 보호",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_WALL_RELEASE",
+      "name": "벽 놓기",
+      "group": "벽",
+      "frames_at_60fps": 4,
+      "variants": 1,
+      "kind": "전환",
+      "note": "상승 힘 없이 낙하",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_LEDGE_CATCH",
+      "name": "가장자리 잡기",
+      "group": "턱",
+      "frames_at_60fps": 8,
+      "variants": 1,
+      "kind": "전용",
+      "note": "두 손 필요, 검은 수납 소켓으로",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_LEDGE_HANG",
+      "name": "가장자리 매달리기",
+      "group": "턱",
+      "frames_at_60fps": 40,
+      "variants": 1,
+      "kind": "반복",
+      "note": "어깨/몸 흔들림",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_LEDGE_CLIMB",
+      "name": "가장자리 올라서기",
+      "group": "턱",
+      "frames_at_60fps": 24,
+      "variants": 1,
+      "kind": "전용",
+      "note": "위 공간 검사 후 실행",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_LEDGE_DROP",
+      "name": "가장자리 놓기",
+      "group": "턱",
+      "frames_at_60fps": 4,
+      "variants": 1,
+      "kind": "전환",
+      "note": "재잡기 잠금 12f",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_LEDGE_JUMP_AWAY",
+      "name": "가장자리 뒤로 도약",
+      "group": "턱",
+      "frames_at_60fps": 10,
+      "variants": 1,
+      "kind": "전용",
+      "note": "손을 놓고 반대 방향으로",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_WIRE_LAUNCH_GROUND",
+      "name": "지상 와이어 발사",
+      "group": "와이어",
+      "frames_at_60fps": 8,
+      "variants": 1,
+      "kind": "상체",
+      "note": "하체 이동 유지, 연결 전 물리 변화 없음",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_WIRE_LAUNCH_AIR",
+      "name": "공중 와이어 발사",
+      "group": "와이어",
+      "frames_at_60fps": 8,
+      "variants": 1,
+      "kind": "전용",
+      "note": "현재 궤적 유지",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_WIRE_FAIL",
+      "name": "와이어 실패/회수",
+      "group": "와이어",
+      "frames_at_60fps": 6,
+      "variants": 1,
+      "kind": "상체",
+      "note": "공중 정지 없이 복귀",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_WIRE_TENSION",
+      "name": "줄 당김 흡수",
+      "group": "와이어",
+      "frames_at_60fps": 6,
+      "variants": 1,
+      "kind": "전용",
+      "note": "손목→어깨→몸통",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_WIRE_SWING_FORWARD",
+      "name": "진자 전진 자세",
+      "group": "와이어",
+      "frames_at_60fps": 16,
+      "variants": 1,
+      "kind": "반복",
+      "note": "진자 위상에 따라 평가",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_WIRE_SWING_BACK",
+      "name": "진자 후진 자세",
+      "group": "와이어",
+      "frames_at_60fps": 16,
+      "variants": 1,
+      "kind": "반복",
+      "note": "무릎 접기와 몸통 기울기",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_WIRE_BOTTOM",
+      "name": "진자 최저점 통과",
+      "group": "와이어",
+      "frames_at_60fps": 6,
+      "variants": 1,
+      "kind": "전환",
+      "note": "어깨 하중과 다리 지연",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_WIRE_APEX",
+      "name": "진자 최고점 통과",
+      "group": "와이어",
+      "frames_at_60fps": 6,
+      "variants": 1,
+      "kind": "전환",
+      "note": "방향 떨림 방지",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_WIRE_RELEASE",
+      "name": "와이어 놓기",
+      "group": "와이어",
+      "frames_at_60fps": 6,
+      "variants": 1,
+      "kind": "전환",
+      "note": "접선 속도 유지",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_WIRE_BREAK",
+      "name": "와이어 강제 해제",
+      "group": "와이어",
+      "frames_at_60fps": 6,
+      "variants": 1,
+      "kind": "반응",
+      "note": "피격/고리 소멸/장애물 접촉",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_DODGE_GROUND",
+      "name": "지상 회피",
+      "group": "회피",
+      "frames_at_60fps": 22,
+      "variants": 1,
+      "kind": "전용",
+      "note": "낮은 스텝; 첫 틱 이동, 14f 경과 후 공격 전환",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_DODGE_AIR",
+      "name": "공중 회피",
+      "group": "회피",
+      "frames_at_60fps": 18,
+      "variants": 1,
+      "kind": "전용",
+      "note": "한 번의 도약 구간당 1회, 12f 경과 후 공격 전환",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_DODGE_END_GROUND",
+      "name": "회피 후 발 디딤",
+      "group": "회피",
+      "frames_at_60fps": 6,
+      "variants": 2,
+      "kind": "전환",
+      "note": "정지/달리기/반격 중 선택",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_DODGE_LAND",
+      "name": "공중 회피 중 착지",
+      "group": "회피",
+      "frames_at_60fps": 8,
+      "variants": 1,
+      "kind": "전환",
+      "note": "원래 회피 시간 유지",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_HURT_LIGHT_FRONT",
+      "name": "전방 약피격",
+      "group": "피격",
+      "frames_at_60fps": 18,
+      "variants": 1,
+      "kind": "반응",
+      "note": "방향과 접촉 높이에 맞춰 반동",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_HURT_LIGHT_BACK",
+      "name": "후방 약피격",
+      "group": "피격",
+      "frames_at_60fps": 18,
+      "variants": 1,
+      "kind": "반응",
+      "note": "반대 방향 반동",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_HURT_HEAVY",
+      "name": "강피격/비틀거림",
+      "group": "피격",
+      "frames_at_60fps": 30,
+      "variants": 1,
+      "kind": "반응",
+      "note": "무릎과 발 재지지",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_HURT_AIR",
+      "name": "공중 피격",
+      "group": "피격",
+      "frames_at_60fps": 18,
+      "variants": 1,
+      "kind": "반응",
+      "note": "넉백과 중력 유지",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_KNOCKDOWN_FALL",
+      "name": "날아가 넘어짐",
+      "group": "피격",
+      "frames_at_60fps": 18,
+      "variants": 1,
+      "kind": "반응",
+      "note": "접지 IK 해제",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_KNOCKDOWN_LAND",
+      "name": "넘어짐 바닥 충돌",
+      "group": "피격",
+      "frames_at_60fps": 10,
+      "variants": 1,
+      "kind": "반응",
+      "note": "실제 바닥 접촉에서 시작",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_DOWN_LOOP",
+      "name": "쓰러진 상태",
+      "group": "피격",
+      "frames_at_60fps": 24,
+      "variants": 1,
+      "kind": "반복",
+      "note": "피격 규칙이 정한 시간",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_GETUP",
+      "name": "일어나기",
+      "group": "피격",
+      "frames_at_60fps": 24,
+      "variants": 1,
+      "kind": "전용",
+      "note": "통제 복귀 시점 별도 이벤트",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_GETUP_DODGE",
+      "name": "기상 회피",
+      "group": "피격",
+      "frames_at_60fps": 22,
+      "variants": 1,
+      "kind": "전용",
+      "note": "회피 가능 시점 이후만",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_WALL_CRASH",
+      "name": "넉백 중 벽 충돌",
+      "group": "피격",
+      "frames_at_60fps": 12,
+      "variants": 1,
+      "kind": "반응",
+      "note": "벽 반대 방향으로 몸 풀림",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_DEATH_GROUND",
+      "name": "지상 사망",
+      "group": "사망",
+      "frames_at_60fps": 60,
+      "variants": 1,
+      "kind": "전용",
+      "note": "무기·무릎·몸 순서로 무너짐",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_DEATH_AIR",
+      "name": "공중 사망",
+      "group": "사망",
+      "frames_at_60fps": 24,
+      "variants": 1,
+      "kind": "전용",
+      "note": "벽/줄/턱 해제, 낙하 후 사망 착지",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_DEATH_LAND",
+      "name": "사망 착지",
+      "group": "사망",
+      "frames_at_60fps": 30,
+      "variants": 1,
+      "kind": "전용",
+      "note": "위치 순간 이동 금지",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_WEAPON_SWAP_BRIDGE",
+      "name": "무기 교체 연결",
+      "group": "상호작용",
+      "frames_at_60fps": 10,
+      "variants": 1,
+      "kind": "전환",
+      "note": "교체 가능한 회수 이후, 장비 규칙이 허용할 때",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_USE_ITEM",
+      "name": "회복/소모품 사용",
+      "group": "상호작용",
+      "frames_at_60fps": 36,
+      "variants": 1,
+      "kind": "전용",
+      "note": "효과 이벤트 이전에 피격되면 소비/효과 없음",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_INTERACT",
+      "name": "문/장치 조작",
+      "group": "상호작용",
+      "frames_at_60fps": 24,
+      "variants": 1,
+      "kind": "전용",
+      "note": "위험한 상호작용은 피격 중단 가능",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_PICKUP",
+      "name": "짧은 획득",
+      "group": "상호작용",
+      "frames_at_60fps": 12,
+      "variants": 1,
+      "kind": "전용",
+      "note": "일반 전리품은 이동을 막지 않음",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "C_REST",
+      "name": "휴식",
+      "group": "상호작용",
+      "frames_at_60fps": 48,
+      "variants": 1,
+      "kind": "전용",
+      "note": "전투 밖 전용",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "S_READY",
+      "name": "일반검 전투 준비 자세",
+      "group": "일반검",
+      "frames_at_60fps": 40,
+      "variants": 1,
+      "kind": "반복",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "S_DRAW",
+      "name": "일반검 검 꺼내기",
+      "group": "일반검",
+      "frames_at_60fps": 12,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "S_SHEATHE",
+      "name": "일반검 검 넣기",
+      "group": "일반검",
+      "frames_at_60fps": 12,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "S_GUARD_ENTER",
+      "name": "일반검 방어 진입",
+      "group": "일반검",
+      "frames_at_60fps": 4,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "S_GUARD_LOOP",
+      "name": "일반검 방어 유지",
+      "group": "일반검",
+      "frames_at_60fps": 30,
+      "variants": 1,
+      "kind": "반복",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "S_GUARD_EXIT",
+      "name": "일반검 방어 해제",
+      "group": "일반검",
+      "frames_at_60fps": 4,
+      "variants": 1,
+      "kind": "전환",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "S_PARRY",
+      "name": "일반검 패링 시도",
+      "group": "일반검",
+      "frames_at_60fps": 18,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "S_PARRY_SUCCESS",
+      "name": "일반검 패링 성공",
+      "group": "일반검",
+      "frames_at_60fps": 10,
+      "variants": 1,
+      "kind": "반응",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "S_GUARD_HIT",
+      "name": "일반검 막기 반동",
+      "group": "일반검",
+      "frames_at_60fps": 12,
+      "variants": 1,
+      "kind": "반응",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "S_GUARD_BREAK",
+      "name": "일반검 방어 무너짐",
+      "group": "일반검",
+      "frames_at_60fps": 30,
+      "variants": 1,
+      "kind": "반응",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "S_RIPOSTE",
+      "name": "일반검 패링 반격",
+      "group": "일반검",
+      "frames_at_60fps": 28,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "S_DODGE_COUNTER",
+      "name": "일반검 회피 반격",
+      "group": "일반검",
+      "frames_at_60fps": 26,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "S_RUN_ATTACK",
+      "name": "일반검 달리기 공격",
+      "group": "일반검",
+      "frames_at_60fps": 28,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "S_TURN_ATTACK",
+      "name": "일반검 반전 공격 연결",
+      "group": "일반검",
+      "frames_at_60fps": 6,
+      "variants": 1,
+      "kind": "전환",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "S_AIR_UP",
+      "name": "일반검 공중 상단 공격",
+      "group": "일반검",
+      "frames_at_60fps": 24,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "S_PLUNGE_ENTER",
+      "name": "일반검 낙하 공격 준비",
+      "group": "일반검",
+      "frames_at_60fps": 8,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "S_PLUNGE_LOOP",
+      "name": "일반검 낙하 공격 자세",
+      "group": "일반검",
+      "frames_at_60fps": 12,
+      "variants": 1,
+      "kind": "반복",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "S_PLUNGE_IMPACT",
+      "name": "일반검 낙하 공격 착지",
+      "group": "일반검",
+      "frames_at_60fps": 22,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "S_AIR_TURN_ATTACK",
+      "name": "일반검 공중 반전 공격 연결",
+      "group": "일반검",
+      "frames_at_60fps": 6,
+      "variants": 1,
+      "kind": "전환",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "S_WALL_KICK_ATTACK",
+      "name": "일반검 벽차기 공격",
+      "group": "일반검",
+      "frames_at_60fps": 28,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "S_WIRE_RELEASE_ATTACK",
+      "name": "일반검 와이어 이탈 공격",
+      "group": "일반검",
+      "frames_at_60fps": 28,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "S_HEAVY",
+      "name": "일반검 비차지 강공격",
+      "group": "일반검",
+      "frames_at_60fps": 32,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "S_CHARGE_ENTER",
+      "name": "일반검 차지 진입",
+      "group": "일반검",
+      "frames_at_60fps": 8,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "S_CHARGE_BUILD",
+      "name": "일반검 차지 축적",
+      "group": "일반검",
+      "frames_at_60fps": 24,
+      "variants": 1,
+      "kind": "반복",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "S_CHARGE_HOLD",
+      "name": "일반검 차지 완성 유지",
+      "group": "일반검",
+      "frames_at_60fps": 30,
+      "variants": 1,
+      "kind": "반복",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "S_CHARGE_RELEASE",
+      "name": "일반검 차지 발동",
+      "group": "일반검",
+      "frames_at_60fps": 30,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "S_CHARGE_CANCEL",
+      "name": "일반검 차지 취소",
+      "group": "일반검",
+      "frames_at_60fps": 4,
+      "variants": 1,
+      "kind": "전환",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "S_RECOVER_GROUND",
+      "name": "일반검 공격 후 지상 복귀",
+      "group": "일반검",
+      "frames_at_60fps": 8,
+      "variants": 1,
+      "kind": "전환",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "S_RECOVER_AIR",
+      "name": "일반검 공격 후 공중 복귀",
+      "group": "일반검",
+      "frames_at_60fps": 8,
+      "variants": 1,
+      "kind": "전환",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "S_LAND_ATTACK",
+      "name": "일반검 공격 중 착지 연결",
+      "group": "일반검",
+      "frames_at_60fps": 8,
+      "variants": 1,
+      "kind": "합성",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "S_WEAPON_WALL_HIT",
+      "name": "일반검 무기가 장애물에 막힘",
+      "group": "일반검",
+      "frames_at_60fps": 10,
+      "variants": 1,
+      "kind": "반응",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "S_LIGHT_1",
+      "name": "일반검 가로베기",
+      "group": "일반검",
+      "frames_at_60fps": 20,
+      "variants": 1,
+      "kind": "전용",
+      "note": "준비/판정/회수 분리",
+      "status": "설계",
+      "reference": "v04 해당 연격 참고"
+    },
+    {
+      "id": "S_LIGHT_2",
+      "name": "일반검 역베기",
+      "group": "일반검",
+      "frames_at_60fps": 24,
+      "variants": 1,
+      "kind": "전용",
+      "note": "준비/판정/회수 분리",
+      "status": "설계",
+      "reference": "v04 해당 연격 참고"
+    },
+    {
+      "id": "S_LIGHT_3",
+      "name": "일반검 내려베기",
+      "group": "일반검",
+      "frames_at_60fps": 34,
+      "variants": 1,
+      "kind": "전용",
+      "note": "준비/판정/회수 분리",
+      "status": "설계",
+      "reference": "v04 해당 연격 참고"
+    },
+    {
+      "id": "S_WALK_LIGHT_1",
+      "name": "일반검 보행 중 1타",
+      "group": "일반검",
+      "frames_at_60fps": 20,
+      "variants": 2,
+      "kind": "합성",
+      "note": "골반/지지발 포함. Blender 원본에서 합성한 완성 자세; 단순 상체 영상 겹치기 금지",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "S_WALK_LIGHT_2",
+      "name": "일반검 보행 중 2타",
+      "group": "일반검",
+      "frames_at_60fps": 24,
+      "variants": 2,
+      "kind": "합성",
+      "note": "골반/지지발 포함. Blender 원본에서 합성한 완성 자세; 단순 상체 영상 겹치기 금지",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "S_AIR_LIGHT_1",
+      "name": "일반검 공중 수평 1타",
+      "group": "일반검",
+      "frames_at_60fps": 22,
+      "variants": 1,
+      "kind": "전용",
+      "note": "중력 유지; 연계 방향은 안전한 회수에서 변경",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "S_AIR_LIGHT_2",
+      "name": "일반검 공중 수평 2타",
+      "group": "일반검",
+      "frames_at_60fps": 22,
+      "variants": 1,
+      "kind": "전용",
+      "note": "중력 유지; 연계 방향은 안전한 회수에서 변경",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "S_WIRE_LIGHT",
+      "name": "일반검 와이어 유지 약공격",
+      "group": "일반검",
+      "frames_at_60fps": 24,
+      "variants": 1,
+      "kind": "전용",
+      "note": "왼손 줄 고정, 오른손 공격; 이동 추진력 추가 없음",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "G_READY",
+      "name": "대검 전투 준비 자세",
+      "group": "대검",
+      "frames_at_60fps": 40,
+      "variants": 1,
+      "kind": "반복",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "G_DRAW",
+      "name": "대검 검 꺼내기",
+      "group": "대검",
+      "frames_at_60fps": 12,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "G_SHEATHE",
+      "name": "대검 검 넣기",
+      "group": "대검",
+      "frames_at_60fps": 12,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "G_GUARD_ENTER",
+      "name": "대검 방어 진입",
+      "group": "대검",
+      "frames_at_60fps": 4,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "G_GUARD_LOOP",
+      "name": "대검 방어 유지",
+      "group": "대검",
+      "frames_at_60fps": 30,
+      "variants": 1,
+      "kind": "반복",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "G_GUARD_EXIT",
+      "name": "대검 방어 해제",
+      "group": "대검",
+      "frames_at_60fps": 4,
+      "variants": 1,
+      "kind": "전환",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "G_PARRY",
+      "name": "대검 패링 시도",
+      "group": "대검",
+      "frames_at_60fps": 18,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "G_PARRY_SUCCESS",
+      "name": "대검 패링 성공",
+      "group": "대검",
+      "frames_at_60fps": 10,
+      "variants": 1,
+      "kind": "반응",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "G_GUARD_HIT",
+      "name": "대검 막기 반동",
+      "group": "대검",
+      "frames_at_60fps": 12,
+      "variants": 1,
+      "kind": "반응",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "G_GUARD_BREAK",
+      "name": "대검 방어 무너짐",
+      "group": "대검",
+      "frames_at_60fps": 30,
+      "variants": 1,
+      "kind": "반응",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "G_RIPOSTE",
+      "name": "대검 패링 반격",
+      "group": "대검",
+      "frames_at_60fps": 28,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "G_DODGE_COUNTER",
+      "name": "대검 회피 반격",
+      "group": "대검",
+      "frames_at_60fps": 36,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "G_RUN_ATTACK",
+      "name": "대검 달리기 공격",
+      "group": "대검",
+      "frames_at_60fps": 44,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "G_TURN_ATTACK",
+      "name": "대검 반전 공격 연결",
+      "group": "대검",
+      "frames_at_60fps": 6,
+      "variants": 1,
+      "kind": "전환",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "G_AIR_UP",
+      "name": "대검 공중 상단 공격",
+      "group": "대검",
+      "frames_at_60fps": 36,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "G_PLUNGE_ENTER",
+      "name": "대검 낙하 공격 준비",
+      "group": "대검",
+      "frames_at_60fps": 12,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "G_PLUNGE_LOOP",
+      "name": "대검 낙하 공격 자세",
+      "group": "대검",
+      "frames_at_60fps": 12,
+      "variants": 1,
+      "kind": "반복",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "G_PLUNGE_IMPACT",
+      "name": "대검 낙하 공격 착지",
+      "group": "대검",
+      "frames_at_60fps": 34,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "G_AIR_TURN_ATTACK",
+      "name": "대검 공중 반전 공격 연결",
+      "group": "대검",
+      "frames_at_60fps": 6,
+      "variants": 1,
+      "kind": "전환",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "G_WALL_KICK_ATTACK",
+      "name": "대검 벽차기 공격",
+      "group": "대검",
+      "frames_at_60fps": 40,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "G_WIRE_RELEASE_ATTACK",
+      "name": "대검 와이어 이탈 공격",
+      "group": "대검",
+      "frames_at_60fps": 42,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "G_HEAVY",
+      "name": "대검 비차지 강공격",
+      "group": "대검",
+      "frames_at_60fps": 48,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "G_CHARGE_ENTER",
+      "name": "대검 차지 진입",
+      "group": "대검",
+      "frames_at_60fps": 12,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "G_CHARGE_BUILD",
+      "name": "대검 차지 축적",
+      "group": "대검",
+      "frames_at_60fps": 24,
+      "variants": 1,
+      "kind": "반복",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "G_CHARGE_HOLD",
+      "name": "대검 차지 완성 유지",
+      "group": "대검",
+      "frames_at_60fps": 30,
+      "variants": 1,
+      "kind": "반복",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "G_CHARGE_RELEASE",
+      "name": "대검 차지 발동",
+      "group": "대검",
+      "frames_at_60fps": 46,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "G_CHARGE_CANCEL",
+      "name": "대검 차지 취소",
+      "group": "대검",
+      "frames_at_60fps": 6,
+      "variants": 1,
+      "kind": "전환",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "G_RECOVER_GROUND",
+      "name": "대검 공격 후 지상 복귀",
+      "group": "대검",
+      "frames_at_60fps": 8,
+      "variants": 1,
+      "kind": "전환",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "G_RECOVER_AIR",
+      "name": "대검 공격 후 공중 복귀",
+      "group": "대검",
+      "frames_at_60fps": 8,
+      "variants": 1,
+      "kind": "전환",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "G_LAND_ATTACK",
+      "name": "대검 공격 중 착지 연결",
+      "group": "대검",
+      "frames_at_60fps": 8,
+      "variants": 1,
+      "kind": "합성",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "G_WEAPON_WALL_HIT",
+      "name": "대검 무기가 장애물에 막힘",
+      "group": "대검",
+      "frames_at_60fps": 16,
+      "variants": 1,
+      "kind": "반응",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "G_LIGHT_1",
+      "name": "대검 사선베기",
+      "group": "대검",
+      "frames_at_60fps": 39,
+      "variants": 1,
+      "kind": "전용",
+      "note": "준비/판정/회수 분리",
+      "status": "설계",
+      "reference": "v04 해당 연격 참고"
+    },
+    {
+      "id": "G_LIGHT_2",
+      "name": "대검 되받아 베기",
+      "group": "대검",
+      "frames_at_60fps": 43,
+      "variants": 1,
+      "kind": "전용",
+      "note": "준비/판정/회수 분리",
+      "status": "설계",
+      "reference": "v04 해당 연격 참고"
+    },
+    {
+      "id": "G_LIGHT_3",
+      "name": "대검 몸통 회전 베기",
+      "group": "대검",
+      "frames_at_60fps": 46,
+      "variants": 1,
+      "kind": "전용",
+      "note": "준비/판정/회수 분리",
+      "status": "설계",
+      "reference": "v04 해당 연격 참고"
+    },
+    {
+      "id": "G_LIGHT_4",
+      "name": "대검 마무리 내려찍기",
+      "group": "대검",
+      "frames_at_60fps": 56,
+      "variants": 1,
+      "kind": "전용",
+      "note": "준비/판정/회수 분리",
+      "status": "설계",
+      "reference": "v04 해당 연격 참고"
+    },
+    {
+      "id": "G_AIR_LIGHT_1",
+      "name": "대검 공중 수평 1타",
+      "group": "대검",
+      "frames_at_60fps": 36,
+      "variants": 1,
+      "kind": "전용",
+      "note": "중력 유지; 연계 방향은 안전한 회수에서 변경",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_READY",
+      "name": "세검 전투 준비 자세",
+      "group": "세검",
+      "frames_at_60fps": 40,
+      "variants": 1,
+      "kind": "반복",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_DRAW",
+      "name": "세검 검 꺼내기",
+      "group": "세검",
+      "frames_at_60fps": 12,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_SHEATHE",
+      "name": "세검 검 넣기",
+      "group": "세검",
+      "frames_at_60fps": 12,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_GUARD_ENTER",
+      "name": "세검 방어 진입",
+      "group": "세검",
+      "frames_at_60fps": 4,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_GUARD_LOOP",
+      "name": "세검 방어 유지",
+      "group": "세검",
+      "frames_at_60fps": 30,
+      "variants": 1,
+      "kind": "반복",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_GUARD_EXIT",
+      "name": "세검 방어 해제",
+      "group": "세검",
+      "frames_at_60fps": 4,
+      "variants": 1,
+      "kind": "전환",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_PARRY",
+      "name": "세검 패링 시도",
+      "group": "세검",
+      "frames_at_60fps": 18,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_PARRY_SUCCESS",
+      "name": "세검 패링 성공",
+      "group": "세검",
+      "frames_at_60fps": 10,
+      "variants": 1,
+      "kind": "반응",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_GUARD_HIT",
+      "name": "세검 막기 반동",
+      "group": "세검",
+      "frames_at_60fps": 12,
+      "variants": 1,
+      "kind": "반응",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_GUARD_BREAK",
+      "name": "세검 방어 무너짐",
+      "group": "세검",
+      "frames_at_60fps": 30,
+      "variants": 1,
+      "kind": "반응",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_RIPOSTE",
+      "name": "세검 패링 반격",
+      "group": "세검",
+      "frames_at_60fps": 20,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_DODGE_COUNTER",
+      "name": "세검 회피 반격",
+      "group": "세검",
+      "frames_at_60fps": 26,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_RUN_ATTACK",
+      "name": "세검 달리기 공격",
+      "group": "세검",
+      "frames_at_60fps": 25,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_TURN_ATTACK",
+      "name": "세검 반전 공격 연결",
+      "group": "세검",
+      "frames_at_60fps": 6,
+      "variants": 1,
+      "kind": "전환",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_AIR_UP",
+      "name": "세검 공중 상단 공격",
+      "group": "세검",
+      "frames_at_60fps": 24,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_PLUNGE_ENTER",
+      "name": "세검 낙하 공격 준비",
+      "group": "세검",
+      "frames_at_60fps": 8,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_PLUNGE_LOOP",
+      "name": "세검 낙하 공격 자세",
+      "group": "세검",
+      "frames_at_60fps": 12,
+      "variants": 1,
+      "kind": "반복",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_PLUNGE_IMPACT",
+      "name": "세검 낙하 공격 착지",
+      "group": "세검",
+      "frames_at_60fps": 22,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_AIR_TURN_ATTACK",
+      "name": "세검 공중 반전 공격 연결",
+      "group": "세검",
+      "frames_at_60fps": 6,
+      "variants": 1,
+      "kind": "전환",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_WALL_KICK_ATTACK",
+      "name": "세검 벽차기 공격",
+      "group": "세검",
+      "frames_at_60fps": 28,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_WIRE_RELEASE_ATTACK",
+      "name": "세검 와이어 이탈 공격",
+      "group": "세검",
+      "frames_at_60fps": 28,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_HEAVY",
+      "name": "세검 비차지 강공격",
+      "group": "세검",
+      "frames_at_60fps": 28,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_CHARGE_ENTER",
+      "name": "세검 차지 진입",
+      "group": "세검",
+      "frames_at_60fps": 8,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_CHARGE_BUILD",
+      "name": "세검 차지 축적",
+      "group": "세검",
+      "frames_at_60fps": 24,
+      "variants": 1,
+      "kind": "반복",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_CHARGE_HOLD",
+      "name": "세검 차지 완성 유지",
+      "group": "세검",
+      "frames_at_60fps": 30,
+      "variants": 1,
+      "kind": "반복",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_CHARGE_RELEASE",
+      "name": "세검 차지 발동",
+      "group": "세검",
+      "frames_at_60fps": 28,
+      "variants": 1,
+      "kind": "전용",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_CHARGE_CANCEL",
+      "name": "세검 차지 취소",
+      "group": "세검",
+      "frames_at_60fps": 4,
+      "variants": 1,
+      "kind": "전환",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_RECOVER_GROUND",
+      "name": "세검 공격 후 지상 복귀",
+      "group": "세검",
+      "frames_at_60fps": 8,
+      "variants": 1,
+      "kind": "전환",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_RECOVER_AIR",
+      "name": "세검 공격 후 공중 복귀",
+      "group": "세검",
+      "frames_at_60fps": 8,
+      "variants": 1,
+      "kind": "전환",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_LAND_ATTACK",
+      "name": "세검 공격 중 착지 연결",
+      "group": "세검",
+      "frames_at_60fps": 8,
+      "variants": 1,
+      "kind": "합성",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_WEAPON_WALL_HIT",
+      "name": "세검 무기가 장애물에 막힘",
+      "group": "세검",
+      "frames_at_60fps": 10,
+      "variants": 1,
+      "kind": "반응",
+      "note": "최종 사건 프레임은 실기 검증 후 고정",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_LIGHT_1",
+      "name": "세검 정면 찌르기",
+      "group": "세검",
+      "frames_at_60fps": 15,
+      "variants": 1,
+      "kind": "전용",
+      "note": "준비/판정/회수 분리",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_LIGHT_2",
+      "name": "세검 낮은 찌르기",
+      "group": "세검",
+      "frames_at_60fps": 15,
+      "variants": 1,
+      "kind": "전용",
+      "note": "준비/판정/회수 분리",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_LIGHT_3",
+      "name": "세검 찌르는 선 변경",
+      "group": "세검",
+      "frames_at_60fps": 18,
+      "variants": 1,
+      "kind": "전용",
+      "note": "준비/판정/회수 분리",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_LIGHT_4",
+      "name": "세검 깊은 런지",
+      "group": "세검",
+      "frames_at_60fps": 28,
+      "variants": 1,
+      "kind": "전용",
+      "note": "준비/판정/회수 분리",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_WALK_LIGHT_1",
+      "name": "세검 보행 중 1타",
+      "group": "세검",
+      "frames_at_60fps": 15,
+      "variants": 2,
+      "kind": "합성",
+      "note": "골반/지지발 포함. Blender 원본에서 합성한 완성 자세; 단순 상체 영상 겹치기 금지",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_WALK_LIGHT_2",
+      "name": "세검 보행 중 2타",
+      "group": "세검",
+      "frames_at_60fps": 15,
+      "variants": 2,
+      "kind": "합성",
+      "note": "골반/지지발 포함. Blender 원본에서 합성한 완성 자세; 단순 상체 영상 겹치기 금지",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_WALK_LIGHT_3",
+      "name": "세검 보행 중 3타",
+      "group": "세검",
+      "frames_at_60fps": 18,
+      "variants": 2,
+      "kind": "합성",
+      "note": "골반/지지발 포함. Blender 원본에서 합성한 완성 자세; 단순 상체 영상 겹치기 금지",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_AIR_LIGHT_1",
+      "name": "세검 공중 수평 1타",
+      "group": "세검",
+      "frames_at_60fps": 18,
+      "variants": 1,
+      "kind": "전용",
+      "note": "중력 유지; 연계 방향은 안전한 회수에서 변경",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_AIR_LIGHT_2",
+      "name": "세검 공중 수평 2타",
+      "group": "세검",
+      "frames_at_60fps": 18,
+      "variants": 1,
+      "kind": "전용",
+      "note": "중력 유지; 연계 방향은 안전한 회수에서 변경",
+      "status": "설계",
+      "reference": null
+    },
+    {
+      "id": "R_WIRE_LIGHT",
+      "name": "세검 와이어 유지 약공격",
+      "group": "세검",
+      "frames_at_60fps": 19,
+      "variants": 1,
+      "kind": "전용",
+      "note": "왼손 줄 고정, 오른손 공격; 이동 추진력 추가 없음",
+      "status": "설계",
+      "reference": null
+    }
+  ],
+  "transitions": [
+    {
+      "id": "T01",
+      "source": "정지",
+      "trigger": "이동",
+      "result": "출발→보행/달리기",
+      "rule": "첫 틱 이동, 전환 완료 대기 없음"
+    },
+    {
+      "id": "T02",
+      "source": "걷기",
+      "trigger": "반대 이동",
+      "result": "걷기 반전",
+      "rule": "현재 지지발 유지"
+    },
+    {
+      "id": "T03",
+      "source": "달리기",
+      "trigger": "반대 이동",
+      "result": "제동→달리기 반전",
+      "rule": "수평속도 부호 즉시 변경 금지"
+    },
+    {
+      "id": "T04",
+      "source": "걷기/달리기",
+      "trigger": "속도 변경",
+      "result": "위상 일치 전환",
+      "rule": "보행 처음으로 되감지 않음"
+    },
+    {
+      "id": "T05",
+      "source": "지상",
+      "trigger": "점프",
+      "result": "제자리/보행/달리기 도약",
+      "rule": "현재 속도 보존, 물리 도약 즉시"
+    },
+    {
+      "id": "T06",
+      "source": "상승/낙하",
+      "trigger": "반대 이동",
+      "result": "공중 반전",
+      "rule": "속도와 몸 방향 분리"
+    },
+    {
+      "id": "T07",
+      "source": "공중",
+      "trigger": "바닥 접촉",
+      "result": "가벼운/이동/강한/고속 착지",
+      "rule": "공격·회피 시간과 자원 검사"
+    },
+    {
+      "id": "T08",
+      "source": "지상",
+      "trigger": "점프+공격 동시",
+      "result": "도약→공중 공격",
+      "rule": "한 입력당 한 행동 소비"
+    },
+    {
+      "id": "T09",
+      "source": "공격 준비",
+      "trigger": "초기 반대 입력",
+      "result": "해당 공격 준비 자세 방향 수정",
+      "rule": "최초 2f만 허용, 이후 방향 고정"
+    },
+    {
+      "id": "T10",
+      "source": "공격 활성",
+      "trigger": "반대 이동",
+      "result": "현재 타격 유지→회수 시 반전",
+      "rule": "피해 판정 방향 고정"
+    },
+    {
+      "id": "T11",
+      "source": "공격 회수",
+      "trigger": "다음 공격",
+      "result": "다음 연격/반전 연격",
+      "rule": "예약 1개, 지정 취소 구간만"
+    },
+    {
+      "id": "T12",
+      "source": "공격 회수",
+      "trigger": "점프/회피",
+      "result": "회수→도약/회피",
+      "rule": "일반4f/대검10f/세검2f 회수 경과 이후"
+    },
+    {
+      "id": "T13",
+      "source": "공중 공격",
+      "trigger": "착지",
+      "result": "동일 공격의 착지 연결",
+      "rule": "공격 ID와 적중 대상 유지"
+    },
+    {
+      "id": "T14",
+      "source": "지상 공격",
+      "trigger": "발판 상실",
+      "result": "현재 준비/활성/회수를 유지한 공중 연결",
+      "rule": "공격 ID 유지, 낙하 시작, 차지만 취소"
+    },
+    {
+      "id": "T15",
+      "source": "낙하 공격",
+      "trigger": "바닥 접촉",
+      "result": "전용 충격→회수",
+      "rule": "몸통 타격과 지면 충격의 동일 대상 중복 금지"
+    },
+    {
+      "id": "T16",
+      "source": "공중",
+      "trigger": "벽 접촉+벽쪽 이동",
+      "result": "접촉→지지→미끄러짐",
+      "rule": "활성 공격/회피/피격은 자동 부착 금지"
+    },
+    {
+      "id": "T17",
+      "source": "벽",
+      "trigger": "점프",
+      "result": "벽차기→공중",
+      "rule": "6f 외측 추진, 재부착12f 금지"
+    },
+    {
+      "id": "T18",
+      "source": "벽",
+      "trigger": "공격",
+      "result": "벽차기 공격→공중",
+      "rule": "벽 해제 이벤트 후 무기 손 사용"
+    },
+    {
+      "id": "T19",
+      "source": "벽차기 직후",
+      "trigger": "반대 입력+공격",
+      "result": "외측 추진 유지+공격 방향 수정",
+      "rule": "새 공격일 때만 가능; 벽 차폐 유지"
+    },
+    {
+      "id": "T20",
+      "source": "공중",
+      "trigger": "잡을 수 있는 턱",
+      "result": "잡기→매달리기",
+      "rule": "활성 공격/회피/피격은 잡기 금지"
+    },
+    {
+      "id": "T21",
+      "source": "턱",
+      "trigger": "위/점프 또는 아래/반대",
+      "result": "올라서기 또는 놓기/뒤도약",
+      "rule": "공간 검사, 올라선 뒤만 공중 자원 회복"
+    },
+    {
+      "id": "T22",
+      "source": "지상/공중",
+      "trigger": "와이어 발사",
+      "result": "발사→성공/실패",
+      "rule": "연결 전 이동 유지"
+    },
+    {
+      "id": "T23",
+      "source": "느슨한 줄",
+      "trigger": "줄 길이 도달",
+      "result": "당김 흡수→진자",
+      "rule": "접선 속도만 유지, 추가 추진력 없음"
+    },
+    {
+      "id": "T24",
+      "source": "공중+연결된 줄",
+      "trigger": "약공격",
+      "result": "한손 공격 또는 대검 제한",
+      "rule": "대검 약공격은 줄을 자동 해제하지 않음"
+    },
+    {
+      "id": "T25",
+      "source": "공중+연결된 줄",
+      "trigger": "강공격",
+      "result": "줄 해제→무기별 이탈 공격",
+      "rule": "양손 그립은 해제 뒤"
+    },
+    {
+      "id": "T26",
+      "source": "공중+연결된 줄",
+      "trigger": "점프/회피",
+      "result": "해제→공중/공중 회피",
+      "rule": "점프 추가 추진 없음; 회피 자원 필요"
+    },
+    {
+      "id": "T27",
+      "source": "줄 연결",
+      "trigger": "새로운 공중→지상 착지/피격/줄 경로 차폐",
+      "result": "해제→착지/피격/낙하",
+      "rule": "남은 관성과 상태 시간 보존"
+    },
+    {
+      "id": "T28",
+      "source": "공격 회수",
+      "trigger": "와이어",
+      "result": "검 회수→왼손 발사",
+      "rule": "기본 취소 구간+왼손 해제 이벤트 필요"
+    },
+    {
+      "id": "T29",
+      "source": "모든 생존 상태",
+      "trigger": "확정 피격",
+      "result": "환경에 맞는 피격",
+      "rule": "부착 해제, 지상 IK 해제, 물리 우선"
+    },
+    {
+      "id": "T30",
+      "source": "모든 상태",
+      "trigger": "체력 소진",
+      "result": "지상/공중 사망",
+      "rule": "입력 중단, 남은 판정 폐쇄"
+    },
+    {
+      "id": "T31",
+      "source": "회피",
+      "trigger": "착지/벽 접촉",
+      "result": "회피 종료 연결/공중 유지",
+      "rule": "회피 무적 시간 재시작 금지"
+    },
+    {
+      "id": "T32",
+      "source": "공격/피격",
+      "trigger": "무기 교체",
+      "result": "교체 예약→허용 시 교체",
+      "rule": "회수 우회와 공중 자원 초기화 금지"
+    },
+    {
+      "id": "T33",
+      "source": "차지",
+      "trigger": "도약/회피/발판 상실",
+      "result": "차지 취소→다음 행동",
+      "rule": "축적 소멸, 차지 이동 운반 금지"
+    },
+    {
+      "id": "T34",
+      "source": "공중",
+      "trigger": "천장 충돌",
+      "result": "움츠림→낙하",
+      "rule": "수직 상승만 중단, 공중 공격 ID 유지"
+    },
+    {
+      "id": "T35",
+      "source": "가벼운 착지",
+      "trigger": "버퍼 점프",
+      "result": "압축 자세→즉시 도약",
+      "rule": "길게 착지 재생 후 출발하지 않음"
+    },
+    {
+      "id": "T36",
+      "source": "강한 착지",
+      "trigger": "버퍼 점프",
+      "result": "8f 잠금 뒤 도약",
+      "rule": "착지 직전 입력 1개를 잠금 종료까지 보존"
+    },
+    {
+      "id": "T37",
+      "source": "지상+느슨한 줄",
+      "trigger": "공격/방어/양손 행동",
+      "result": "줄 회수→지상 행동",
+      "rule": "지상 공격 선택, 공중 공격 오선택 금지"
+    },
+    {
+      "id": "T38",
+      "source": "지상+느슨한 줄",
+      "trigger": "점프",
+      "result": "줄 유지한 지상 도약",
+      "rule": "공중 줄 해제로 잘못 해석하지 않음"
+    },
+    {
+      "id": "T39",
+      "source": "줄 해제 직후",
+      "trigger": "벽/턱 접촉",
+      "result": "다음 틱부터 지지 잡기 검사",
+      "rule": "한 입력으로 해제+벽차기 이중 추진 금지"
+    }
+  ],
+  "render_contract": "Master motions and blends are authored on one 3D rig. Animation connection lab uses that rig. If final game uses flat sprite frames, combinations/bridges must be baked first; alpha-crossfading whole sprites is forbidden. This design does not assert a finished game renderer."
+}

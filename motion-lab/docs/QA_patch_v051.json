@@ -1,0 +1,277 @@
+{
+	"details": {
+		"arena_spawn_capsule_clear_station_0": {
+			"overlapping_bodies": [],
+			"spawn": "(-4.2, 0.06, 0.0)"
+		},
+		"arena_spawn_capsule_clear_station_1": {
+			"overlapping_bodies": [],
+			"spawn": "(10.65, 0.06, 0.0)"
+		},
+		"arena_spawn_capsule_clear_station_2": {
+			"overlapping_bodies": [],
+			"spawn": "(17.1, 1.26, 0.0)"
+		},
+		"arena_spawn_capsule_clear_station_3": {
+			"overlapping_bodies": [],
+			"spawn": "(32.0, 0.06, 0.0)"
+		},
+		"auto_release_has_full_strength_weapon_0": {
+			"active": 0.0833333333333333,
+			"advance_distance": 0.5,
+			"advance_end": 0.25,
+			"advance_start": 0.133333333333333,
+			"cancel_recovery": 0.0666666666666667,
+			"charge": 1.0,
+			"damage": 39.6,
+			"hitstop": 0.0666666666666667,
+			"index": 0,
+			"kind": "strong",
+			"reach": 1.47,
+			"recovery": 0.283333333333333,
+			"startup": 0.166666666666667,
+			"strength": 1.75,
+			"total": 0.533333333333333,
+			"weapon": 0
+		},
+		"auto_release_has_full_strength_weapon_1": {
+			"active": 0.116666666666667,
+			"advance_distance": 0.65,
+			"advance_end": 0.366666666666667,
+			"advance_start": 0.216666666666667,
+			"cancel_recovery": 0.166666666666667,
+			"charge": 1.0,
+			"damage": 70.4,
+			"hitstop": 0.1,
+			"index": 0,
+			"kind": "strong",
+			"reach": 1.87,
+			"recovery": 0.433333333333333,
+			"startup": 0.25,
+			"strength": 2.8875,
+			"total": 0.8,
+			"weapon": 1
+		},
+		"auto_release_has_full_strength_weapon_2": {
+			"active": 0.266666666666667,
+			"advance_distance": 2.8,
+			"advance_end": 0.4,
+			"advance_start": 0.133333333333333,
+			"cancel_recovery": 0.0333333333333333,
+			"charge": 1.0,
+			"damage": 24.2,
+			"hitstop": 0.05,
+			"index": 0,
+			"kind": "strong",
+			"reach": 1.6,
+			"recovery": 0.3,
+			"startup": 0.133333333333333,
+			"strength": 1.1375,
+			"total": 0.7,
+			"weapon": 2
+		},
+		"charged_forward_distance_weapon_0": 0.5,
+		"charged_forward_distance_weapon_1": 0.649999976158142,
+		"charged_forward_distance_weapon_2": 2.79999995231628,
+		"down_input_drops_from_ledge": "(9.7, 0.67, 0.0)",
+		"early_manual_charge_release_weapon_0": {
+			"action": "attack",
+			"charge": 0.555555555555556
+		},
+		"early_manual_charge_release_weapon_1": {
+			"action": "attack",
+			"charge": 0.533333333333333
+		},
+		"early_manual_charge_release_weapon_2": {
+			"action": "attack",
+			"charge": 0.466666666666667
+		},
+		"forward_pullup_finishes_on_top_face_-1": {
+			"action": "free",
+			"position": "(13.51445, 3.000063, 0.0)"
+		},
+		"forward_pullup_finishes_on_top_face_1": {
+			"action": "free",
+			"position": "(10.48555, 3.000063, 0.0)"
+		},
+		"fresh_forward_starts_pullup_face_-1": "climb",
+		"fresh_forward_starts_pullup_face_1": "climb",
+		"full_charge_auto_releases_weapon_0": {
+			"action": "attack",
+			"charge": 1.0,
+			"id": 1
+		},
+		"full_charge_auto_releases_weapon_1": {
+			"action": "attack",
+			"charge": 1.0,
+			"id": 4
+		},
+		"full_charge_auto_releases_weapon_2": {
+			"action": "attack",
+			"charge": 1.0,
+			"id": 7
+		},
+		"held_approach_does_not_auto_climb_face_-1": {
+			"action": "ledge",
+			"position": "(14.3, 1.12, 0.0)"
+		},
+		"held_approach_does_not_auto_climb_face_1": {
+			"action": "ledge",
+			"position": "(9.7, 1.12, 0.0)"
+		},
+		"held_button_does_not_repeat_weapon_0": {
+			"action": "free",
+			"attacks": 1
+		},
+		"held_button_does_not_repeat_weapon_1": {
+			"action": "free",
+			"attacks": 1
+		},
+		"held_button_does_not_repeat_weapon_2": {
+			"action": "free",
+			"attacks": 1
+		},
+		"ledge_grab_geometry_face_-1": "(14.3, 1.12, 0.0)",
+		"ledge_grab_geometry_face_1": "(9.7, 1.12, 0.0)",
+		"ledge_hand_pose_does_not_cycle_face_-1": {
+			"end": [
+				"(14.025, 3.015, 0.14)",
+				"(14.025, 3.015, -0.14)"
+			],
+			"start": [
+				"(14.025, 3.015, 0.14)",
+				"(14.025, 3.015, -0.14)"
+			]
+		},
+		"ledge_hand_pose_does_not_cycle_face_1": {
+			"end": [
+				"(9.975, 3.015, -0.14)",
+				"(9.975, 3.015, 0.14)"
+			],
+			"start": [
+				"(9.975, 3.015, -0.14)",
+				"(9.975, 3.015, 0.14)"
+			]
+		},
+		"ledge_hands_reach_top_face_-1": {
+			"grip": "(14.0, 3.0, 0.0)",
+			"hands": [
+				"(14.025, 3.015, 0.14)",
+				"(14.025, 3.015, -0.14)"
+			]
+		},
+		"ledge_hands_reach_top_face_1": {
+			"grip": "(10.0, 3.0, 0.0)",
+			"hands": [
+				"(9.975, 3.015, -0.14)",
+				"(9.975, 3.015, 0.14)"
+			]
+		},
+		"ledge_regrab_fixture_for_up": "(9.7, 1.12, 0.0)",
+		"ledge_waits_stationary_without_input_face_-1": {
+			"action": "ledge",
+			"position": "(14.3, 1.12, 0.0)"
+		},
+		"ledge_waits_stationary_without_input_face_1": {
+			"action": "ledge",
+			"position": "(9.7, 1.12, 0.0)"
+		},
+		"no_premature_auto_release_weapon_0": {
+			"action": "charge",
+			"charge": 0.944444444444445
+		},
+		"no_premature_auto_release_weapon_1": {
+			"action": "charge",
+			"charge": 0.966666666666668
+		},
+		"no_premature_auto_release_weapon_2": {
+			"action": "charge",
+			"charge": 0.933333333333333
+		},
+		"rapier_dash_does_not_damage_through_wall": [],
+		"rapier_dash_follows_left_facing": {
+			"from": -3.09416675567627,
+			"to": -5.89416646957397
+		},
+		"rapier_dash_pierces_three_targets_once": {
+			"end_x": 2.79999995231628,
+			"hits": [
+				1,
+				1,
+				1
+			]
+		},
+		"rapier_dash_stops_at_solid_wall": "(1.559128, 0.0, 0.0)",
+		"rapier_dash_uses_one_attack_for_all_targets": [
+			10
+		],
+		"tap_remains_uncharged_strong_weapon_0": {
+			"action": "attack",
+			"charge": 0.0
+		},
+		"tap_remains_uncharged_strong_weapon_1": {
+			"action": "attack",
+			"charge": 0.0
+		},
+		"tap_remains_uncharged_strong_weapon_2": {
+			"action": "attack",
+			"charge": 0.0
+		},
+		"up_input_starts_pullup": "climb",
+		"up_pullup_finishes_on_top": "(10.48555, 3.000063, 0.0)"
+	},
+	"engine": "4.6.3-stable (official)",
+	"failures": [],
+	"passed": [
+		"no_premature_auto_release_weapon_0",
+		"full_charge_auto_releases_weapon_0",
+		"auto_release_has_full_strength_weapon_0",
+		"held_button_does_not_repeat_weapon_0",
+		"charged_forward_distance_weapon_0",
+		"early_manual_charge_release_weapon_0",
+		"tap_remains_uncharged_strong_weapon_0",
+		"no_premature_auto_release_weapon_1",
+		"full_charge_auto_releases_weapon_1",
+		"auto_release_has_full_strength_weapon_1",
+		"held_button_does_not_repeat_weapon_1",
+		"charged_forward_distance_weapon_1",
+		"early_manual_charge_release_weapon_1",
+		"tap_remains_uncharged_strong_weapon_1",
+		"no_premature_auto_release_weapon_2",
+		"full_charge_auto_releases_weapon_2",
+		"auto_release_has_full_strength_weapon_2",
+		"held_button_does_not_repeat_weapon_2",
+		"charged_forward_distance_weapon_2",
+		"early_manual_charge_release_weapon_2",
+		"tap_remains_uncharged_strong_weapon_2",
+		"rapier_dash_pierces_three_targets_once",
+		"rapier_dash_uses_one_attack_for_all_targets",
+		"rapier_dash_stops_at_solid_wall",
+		"rapier_dash_does_not_damage_through_wall",
+		"rapier_dash_follows_left_facing",
+		"ledge_grab_geometry_face_1",
+		"held_approach_does_not_auto_climb_face_1",
+		"ledge_waits_stationary_without_input_face_1",
+		"ledge_hand_pose_does_not_cycle_face_1",
+		"ledge_hands_reach_top_face_1",
+		"fresh_forward_starts_pullup_face_1",
+		"forward_pullup_finishes_on_top_face_1",
+		"ledge_grab_geometry_face_-1",
+		"held_approach_does_not_auto_climb_face_-1",
+		"ledge_waits_stationary_without_input_face_-1",
+		"ledge_hand_pose_does_not_cycle_face_-1",
+		"ledge_hands_reach_top_face_-1",
+		"fresh_forward_starts_pullup_face_-1",
+		"forward_pullup_finishes_on_top_face_-1",
+		"ledge_regrab_fixture_for_up",
+		"up_input_starts_pullup",
+		"up_pullup_finishes_on_top",
+		"down_input_drops_from_ledge",
+		"arena_spawn_capsule_clear_station_0",
+		"arena_spawn_capsule_clear_station_1",
+		"arena_spawn_capsule_clear_station_2",
+		"arena_spawn_capsule_clear_station_3"
+	],
+	"platform": "Linux",
+	"scope": "Actual Godot physics, live imported skeletal poses and socket collision. Charge auto-release, displacement, piercing, solid wall and ledge input regression checks. No rendered visual quality or Windows-execution claim."
+}

@@ -1,0 +1,8 @@
+# Godot 캐시·내보내기 결과
+.godot/
+*.tmp
+export/
+build/
+
+# 대용량 렌더링 결과는 확정본만 올린다
+capture_raw/

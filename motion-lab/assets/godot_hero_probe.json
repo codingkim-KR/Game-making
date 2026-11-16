@@ -1,0 +1,272 @@
+{
+  "animation_player_path": "AnimationPlayer",
+  "bone_count": 65,
+  "clips": {
+    "climb": {
+      "first_track": "HeroB_AuthoredRig/Skeleton3D:root",
+      "length": 0.666666686534882,
+      "tracks": 57
+    },
+    "consume": {
+      "first_track": "HeroB_AuthoredRig/Skeleton3D:root",
+      "length": 1.33333337306976,
+      "tracks": 57
+    },
+    "crouch": {
+      "first_track": "HeroB_AuthoredRig/Skeleton3D:root",
+      "length": 2.93333339691162,
+      "tracks": 57
+    },
+    "death": {
+      "first_track": "HeroB_AuthoredRig/Skeleton3D:root",
+      "length": 2.40000009536743,
+      "tracks": 57
+    },
+    "great_1": {
+      "first_track": "HeroB_AuthoredRig/Skeleton3D:root",
+      "length": 0.816666662693024,
+      "tracks": 57
+    },
+    "great_2": {
+      "first_track": "HeroB_AuthoredRig/Skeleton3D:root",
+      "length": 0.633333325386047,
+      "tracks": 57
+    },
+    "great_3": {
+      "first_track": "HeroB_AuthoredRig/Skeleton3D:root",
+      "length": 0.666666686534882,
+      "tracks": 57
+    },
+    "great_4": {
+      "first_track": "HeroB_AuthoredRig/Skeleton3D:root",
+      "length": 1.51666665077209,
+      "tracks": 57
+    },
+    "great_combo": {
+      "first_track": "HeroB_AuthoredRig/Skeleton3D:root",
+      "length": 4.33333349227905,
+      "tracks": 57
+    },
+    "guard": {
+      "first_track": "HeroB_AuthoredRig/Skeleton3D:root",
+      "length": 1.23333334922791,
+      "tracks": 57
+    },
+    "hit": {
+      "first_track": "HeroB_AuthoredRig/Skeleton3D:root",
+      "length": 0.333333343267441,
+      "tracks": 57
+    },
+    "hit_head": {
+      "first_track": "HeroB_AuthoredRig/Skeleton3D:root",
+      "length": 0.433333337306976,
+      "tracks": 57
+    },
+    "hit_heavy": {
+      "first_track": "HeroB_AuthoredRig/Skeleton3D:root",
+      "length": 0.833333313465118,
+      "tracks": 57
+    },
+    "idle": {
+      "first_track": "HeroB_AuthoredRig/Skeleton3D:root",
+      "length": 2.5,
+      "tracks": 57
+    },
+    "interact": {
+      "first_track": "HeroB_AuthoredRig/Skeleton3D:root",
+      "length": 2.0,
+      "tracks": 57
+    },
+    "jump": {
+      "first_track": "HeroB_AuthoredRig/Skeleton3D:root",
+      "length": 2.5,
+      "tracks": 57
+    },
+    "jump_land": {
+      "first_track": "HeroB_AuthoredRig/Skeleton3D:root",
+      "length": 1.26666665077209,
+      "tracks": 57
+    },
+    "jump_start": {
+      "first_track": "HeroB_AuthoredRig/Skeleton3D:root",
+      "length": 1.33333337306976,
+      "tracks": 57
+    },
+    "rapier_1": {
+      "first_track": "HeroB_AuthoredRig/Skeleton3D:root",
+      "length": 1.60000002384186,
+      "tracks": 57
+    },
+    "rapier_2": {
+      "first_track": "HeroB_AuthoredRig/Skeleton3D:root",
+      "length": 1.60000002384186,
+      "tracks": 57
+    },
+    "rapier_3": {
+      "first_track": "HeroB_AuthoredRig/Skeleton3D:root",
+      "length": 1.60000002384186,
+      "tracks": 57
+    },
+    "rapier_4": {
+      "first_track": "HeroB_AuthoredRig/Skeleton3D:root",
+      "length": 1.60000002384186,
+      "tracks": 57
+    },
+    "rapier_idle": {
+      "first_track": "HeroB_AuthoredRig/Skeleton3D:root",
+      "length": 1.0,
+      "tracks": 57
+    },
+    "roll": {
+      "first_track": "HeroB_AuthoredRig/Skeleton3D:root",
+      "length": 1.46666669845581,
+      "tracks": 57
+    },
+    "run": {
+      "first_track": "HeroB_AuthoredRig/Skeleton3D:root",
+      "length": 0.933333337306976,
+      "tracks": 57
+    },
+    "slide": {
+      "first_track": "HeroB_AuthoredRig/Skeleton3D:root",
+      "length": 2.0,
+      "tracks": 57
+    },
+    "sprint": {
+      "first_track": "HeroB_AuthoredRig/Skeleton3D:root",
+      "length": 0.666666686534882,
+      "tracks": 57
+    },
+    "sword_1": {
+      "first_track": "HeroB_AuthoredRig/Skeleton3D:root",
+      "length": 0.816666662693024,
+      "tracks": 57
+    },
+    "sword_2": {
+      "first_track": "HeroB_AuthoredRig/Skeleton3D:root",
+      "length": 0.616666674613953,
+      "tracks": 57
+    },
+    "sword_3": {
+      "first_track": "HeroB_AuthoredRig/Skeleton3D:root",
+      "length": 0.816666662693024,
+      "tracks": 57
+    },
+    "sword_a": {
+      "first_track": "HeroB_AuthoredRig/Skeleton3D:root",
+      "length": 0.433333337306976,
+      "tracks": 57
+    },
+    "sword_a_recover": {
+      "first_track": "HeroB_AuthoredRig/Skeleton3D:root",
+      "length": 0.966666638851166,
+      "tracks": 57
+    },
+    "sword_b": {
+      "first_track": "HeroB_AuthoredRig/Skeleton3D:root",
+      "length": 0.533333361148834,
+      "tracks": 57
+    },
+    "sword_b_recover": {
+      "first_track": "HeroB_AuthoredRig/Skeleton3D:root",
+      "length": 1.03333330154419,
+      "tracks": 57
+    },
+    "sword_c": {
+      "first_track": "HeroB_AuthoredRig/Skeleton3D:root",
+      "length": 2.0,
+      "tracks": 57
+    },
+    "sword_combo": {
+      "first_track": "HeroB_AuthoredRig/Skeleton3D:root",
+      "length": 3.0,
+      "tracks": 57
+    },
+    "sword_dash": {
+      "first_track": "HeroB_AuthoredRig/Skeleton3D:root",
+      "length": 1.56666672229767,
+      "tracks": 57
+    },
+    "sword_idle": {
+      "first_track": "HeroB_AuthoredRig/Skeleton3D:root",
+      "length": 1.66666662693024,
+      "tracks": 57
+    },
+    "walk": {
+      "first_track": "HeroB_AuthoredRig/Skeleton3D:root",
+      "length": 1.33333337306976,
+      "tracks": 57
+    }
+  },
+  "grip_path": "HeroB_AuthoredRig/Skeleton3D/hand_r/GripR",
+  "samples": {
+    "rapier_1": {
+      "blade_direction": [
+        0.019620394334197,
+        0.0097695617005229,
+        0.999759793281555
+      ],
+      "grip": [
+        -0.451127469539642,
+        1.15026068687439,
+        0.451333791017532
+      ],
+      "head": [
+        0.008580157533288,
+        1.52354001998901,
+        0.304125130176544
+      ],
+      "tip": [
+        -0.431507080793381,
+        1.16003024578094,
+        1.45109331607819
+      ]
+    },
+    "sword_1": {
+      "blade_direction": [
+        0.222629308700562,
+        0.23199100792408,
+        0.946898281574249
+      ],
+      "grip": [
+        0.347712695598602,
+        1.40195882320404,
+        0.252367824316025
+      ],
+      "head": [
+        -0.135761350393295,
+        1.22792613506317,
+        0.203484952449799
+      ],
+      "tip": [
+        0.570341944694519,
+        1.63394975662231,
+        1.19926583766937
+      ]
+    },
+    "sword_idle": {
+      "blade_direction": [
+        -0.742915511131287,
+        0.347117483615875,
+        0.572351336479187
+      ],
+      "grip": [
+        -0.285377025604248,
+        0.880379319190979,
+        -0.454157412052155
+      ],
+      "head": [
+        -0.0252752639353275,
+        1.39010190963745,
+        0.0137084312736988
+      ],
+      "tip": [
+        -1.02829241752625,
+        1.22749674320221,
+        0.118193805217743
+      ]
+    }
+  },
+  "skeleton_path": "HeroB_AuthoredRig/Skeleton3D",
+  "tip_path": "HeroB_AuthoredRig/Skeleton3D/hand_r/GripR/GripTipR"
+}

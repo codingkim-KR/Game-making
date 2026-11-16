@@ -1,0 +1,155 @@
+{
+	"details": {
+		"live_combo_weapon_0_face_-1": {
+			"expected": 3,
+			"hits": 3,
+			"ids": [
+				16,
+				17,
+				18
+			],
+			"queued": [
+				0,
+				1
+			]
+		},
+		"live_combo_weapon_0_face_1": {
+			"expected": 3,
+			"hits": 3,
+			"ids": [
+				2,
+				3,
+				4
+			],
+			"queued": [
+				0,
+				1
+			]
+		},
+		"live_combo_weapon_1_face_-1": {
+			"expected": 4,
+			"hits": 4,
+			"ids": [
+				20,
+				21,
+				22,
+				23
+			],
+			"queued": [
+				0,
+				1,
+				2
+			]
+		},
+		"live_combo_weapon_1_face_1": {
+			"expected": 4,
+			"hits": 4,
+			"ids": [
+				6,
+				7,
+				8,
+				9
+			],
+			"queued": [
+				0,
+				1,
+				2
+			]
+		},
+		"live_combo_weapon_2_face_-1": {
+			"expected": 4,
+			"hits": 4,
+			"ids": [
+				25,
+				26,
+				27,
+				28
+			],
+			"queued": [
+				0,
+				1,
+				2
+			]
+		},
+		"live_combo_weapon_2_face_1": {
+			"expected": 4,
+			"hits": 4,
+			"ids": [
+				11,
+				12,
+				13,
+				14
+			],
+			"queued": [
+				0,
+				1,
+				2
+			]
+		},
+		"live_single_weapon_0_face_-1": {
+			"blade": [
+				"(0.266715, 0.929033, -0.45329)",
+				"(-0.278947, 1.195578, -0.99982)"
+			],
+			"hits": 1
+		},
+		"live_single_weapon_0_face_1": {
+			"blade": [
+				"(-0.386905, 0.940128, 0.391974)",
+				"(-0.011153, 1.231685, 1.056274)"
+			],
+			"hits": 1
+		},
+		"live_single_weapon_1_face_-1": {
+			"blade": [
+				"(0.230854, 0.965659, -0.488474)",
+				"(-0.573687, 1.356441, -1.228692)"
+			],
+			"hits": 1
+		},
+		"live_single_weapon_1_face_1": {
+			"blade": [
+				"(-0.397457, 0.958558, 0.378702)",
+				"(0.086922, 1.298305, 1.377636)"
+			],
+			"hits": 1
+		},
+		"live_single_weapon_2_face_-1": {
+			"blade": [
+				"(-0.241039, 1.06357, -0.489811)",
+				"(-1.140998, 1.063569, -0.481228)"
+			],
+			"hits": 1
+		},
+		"live_single_weapon_2_face_1": {
+			"blade": [
+				"(0.07691, 1.06357, 0.527225)",
+				"(0.933883, 1.063569, 0.802174)"
+			],
+			"hits": 1
+		},
+		"real_skinned_weapon_socket_available": [
+			"(-0.463894, 0.9386, 0.349938)",
+			"(-0.135033, 1.171186, 1.060742)"
+		]
+	},
+	"engine": "4.6.3-stable (official)",
+	"failures": [],
+	"passed": [
+		"real_skinned_weapon_socket_available",
+		"live_single_weapon_0_face_1",
+		"live_combo_weapon_0_face_1",
+		"live_single_weapon_1_face_1",
+		"live_combo_weapon_1_face_1",
+		"live_single_weapon_2_face_1",
+		"live_combo_weapon_2_face_1",
+		"live_single_weapon_0_face_-1",
+		"live_combo_weapon_0_face_-1",
+		"live_single_weapon_1_face_-1",
+		"live_combo_weapon_1_face_-1",
+		"live_single_weapon_2_face_-1",
+		"live_combo_weapon_2_face_-1"
+	],
+	"platform": "Linux",
+	"scope": "Actual imported skeleton, HeroVisual sampling, weapon sockets and controller swept collision. Headless; no rendered visual quality claim."
+}

@@ -1,0 +1,657 @@
+{
+  "height": 1.84,
+  "native_forward_godot": "+Z",
+  "native_forward_blender": "-Y",
+  "mesh_count": 16,
+  "bones": [
+    "root",
+    "pelvis",
+    "spine_01",
+    "spine_02",
+    "spine_03",
+    "neck_01",
+    "Head",
+    "clavicle_l",
+    "upperarm_l",
+    "lowerarm_l",
+    "hand_l",
+    "index_01_l",
+    "index_02_l",
+    "index_03_l",
+    "index_04_leaf_l",
+    "middle_01_l",
+    "middle_02_l",
+    "middle_03_l",
+    "middle_04_leaf_l",
+    "pinky_01_l",
+    "pinky_02_l",
+    "pinky_03_l",
+    "pinky_04_leaf_l",
+    "ring_01_l",
+    "ring_02_l",
+    "ring_03_l",
+    "ring_04_leaf_l",
+    "thumb_01_l",
+    "thumb_02_l",
+    "thumb_03_l",
+    "thumb_04_leaf_l",
+    "clavicle_r",
+    "upperarm_r",
+    "lowerarm_r",
+    "hand_r",
+    "index_01_r",
+    "index_02_r",
+    "index_03_r",
+    "index_04_leaf_r",
+    "middle_01_r",
+    "middle_02_r",
+    "middle_03_r",
+    "middle_04_leaf_r",
+    "pinky_01_r",
+    "pinky_02_r",
+    "pinky_03_r",
+    "pinky_04_leaf_r",
+    "ring_01_r",
+    "ring_02_r",
+    "ring_03_r",
+    "ring_04_leaf_r",
+    "thumb_01_r",
+    "thumb_02_r",
+    "thumb_03_r",
+    "thumb_04_leaf_r",
+    "thigh_l",
+    "calf_l",
+    "foot_l",
+    "ball_l",
+    "ball_leaf_l",
+    "thigh_r",
+    "calf_r",
+    "foot_r",
+    "ball_r",
+    "ball_leaf_r"
+  ],
+  "clips": {
+    "idle": {
+      "duration": 2.5,
+      "contact_time": null,
+      "loop": true,
+      "provenance": {
+        "author": "Quaternius",
+        "pack": "universal-animation-library",
+        "source_clip": "Idle_Loop",
+        "license": "CC0"
+      }
+    },
+    "sword_idle": {
+      "duration": 1.6666666666666667,
+      "contact_time": null,
+      "loop": true,
+      "provenance": {
+        "author": "Quaternius",
+        "pack": "universal-animation-library",
+        "source_clip": "Sword_Idle",
+        "license": "CC0"
+      }
+    },
+    "walk": {
+      "duration": 1.3333333333333333,
+      "contact_time": null,
+      "loop": true,
+      "provenance": {
+        "author": "Quaternius",
+        "pack": "universal-animation-library",
+        "source_clip": "Walk_Loop",
+        "license": "CC0"
+      }
+    },
+    "run": {
+      "duration": 0.9333333333333333,
+      "contact_time": null,
+      "loop": true,
+      "provenance": {
+        "author": "Quaternius",
+        "pack": "universal-animation-library",
+        "source_clip": "Jog_Fwd_Loop",
+        "license": "CC0"
+      }
+    },
+    "sprint": {
+      "duration": 0.6666666666666666,
+      "contact_time": null,
+      "loop": true,
+      "provenance": {
+        "author": "Quaternius",
+        "pack": "universal-animation-library",
+        "source_clip": "Sprint_Loop",
+        "license": "CC0"
+      }
+    },
+    "jump_start": {
+      "duration": 1.3333333333333333,
+      "contact_time": null,
+      "loop": false,
+      "provenance": {
+        "author": "Quaternius",
+        "pack": "universal-animation-library",
+        "source_clip": "Jump_Start",
+        "license": "CC0"
+      }
+    },
+    "jump_loop": {
+      "duration": 2.5,
+      "contact_time": null,
+      "loop": true,
+      "provenance": {
+        "author": "Quaternius",
+        "pack": "universal-animation-library",
+        "source_clip": "Jump_Loop",
+        "license": "CC0"
+      }
+    },
+    "jump_land": {
+      "duration": 1.2666666666666666,
+      "contact_time": null,
+      "loop": false,
+      "provenance": {
+        "author": "Quaternius",
+        "pack": "universal-animation-library",
+        "source_clip": "Jump_Land",
+        "license": "CC0"
+      }
+    },
+    "roll": {
+      "duration": 1.4666666666666666,
+      "contact_time": null,
+      "loop": false,
+      "provenance": {
+        "author": "Quaternius",
+        "pack": "universal-animation-library",
+        "source_clip": "Roll",
+        "license": "CC0"
+      }
+    },
+    "hit": {
+      "duration": 0.3333333333333333,
+      "contact_time": null,
+      "loop": false,
+      "provenance": {
+        "author": "Quaternius",
+        "pack": "universal-animation-library",
+        "source_clip": "Hit_Chest",
+        "license": "CC0"
+      }
+    },
+    "hit_head": {
+      "duration": 0.43333333333333335,
+      "contact_time": null,
+      "loop": false,
+      "provenance": {
+        "author": "Quaternius",
+        "pack": "universal-animation-library",
+        "source_clip": "Hit_Head",
+        "license": "CC0"
+      }
+    },
+    "death": {
+      "duration": 2.4,
+      "contact_time": null,
+      "loop": false,
+      "provenance": {
+        "author": "Quaternius",
+        "pack": "universal-animation-library",
+        "source_clip": "Death01",
+        "license": "CC0"
+      }
+    },
+    "interact": {
+      "duration": 2.0,
+      "contact_time": null,
+      "loop": false,
+      "provenance": {
+        "author": "Quaternius",
+        "pack": "universal-animation-library",
+        "source_clip": "Interact",
+        "license": "CC0"
+      }
+    },
+    "crouch": {
+      "duration": 2.933333333333333,
+      "contact_time": null,
+      "loop": true,
+      "provenance": {
+        "author": "Quaternius",
+        "pack": "universal-animation-library",
+        "source_clip": "Crouch_Idle_Loop",
+        "license": "CC0"
+      }
+    },
+    "sword_combo": {
+      "duration": 3.0,
+      "contact_time": null,
+      "loop": false,
+      "provenance": {
+        "author": "Quaternius",
+        "pack": "universal-animation-library-2",
+        "source_clip": "Sword_Regular_Combo",
+        "license": "CC0"
+      }
+    },
+    "great_combo": {
+      "duration": 4.333333333333333,
+      "contact_time": null,
+      "loop": false,
+      "provenance": {
+        "author": "Quaternius",
+        "pack": "universal-animation-library-2",
+        "source_clip": "Sword_Heavy_Combo",
+        "license": "CC0"
+      }
+    },
+    "sword_a": {
+      "duration": 0.43333333333333335,
+      "contact_time": null,
+      "loop": false,
+      "provenance": {
+        "author": "Quaternius",
+        "pack": "universal-animation-library-2",
+        "source_clip": "Sword_Regular_A",
+        "license": "CC0"
+      }
+    },
+    "sword_a_recover": {
+      "duration": 0.9666666666666667,
+      "contact_time": null,
+      "loop": false,
+      "provenance": {
+        "author": "Quaternius",
+        "pack": "universal-animation-library-2",
+        "source_clip": "Sword_Regular_A_Rec",
+        "license": "CC0"
+      }
+    },
+    "sword_b": {
+      "duration": 0.5333333333333333,
+      "contact_time": null,
+      "loop": false,
+      "provenance": {
+        "author": "Quaternius",
+        "pack": "universal-animation-library-2",
+        "source_clip": "Sword_Regular_B",
+        "license": "CC0"
+      }
+    },
+    "sword_b_recover": {
+      "duration": 1.0333333333333334,
+      "contact_time": null,
+      "loop": false,
+      "provenance": {
+        "author": "Quaternius",
+        "pack": "universal-animation-library-2",
+        "source_clip": "Sword_Regular_B_Rec",
+        "license": "CC0"
+      }
+    },
+    "sword_c": {
+      "duration": 2.0,
+      "contact_time": null,
+      "loop": false,
+      "provenance": {
+        "author": "Quaternius",
+        "pack": "universal-animation-library-2",
+        "source_clip": "Sword_Regular_C",
+        "license": "CC0"
+      }
+    },
+    "guard": {
+      "duration": 1.2333333333333334,
+      "contact_time": null,
+      "loop": false,
+      "provenance": {
+        "author": "Quaternius",
+        "pack": "universal-animation-library-2",
+        "source_clip": "Sword_Block",
+        "license": "CC0"
+      }
+    },
+    "climb": {
+      "duration": 0.6666666666666666,
+      "contact_time": null,
+      "loop": false,
+      "provenance": {
+        "author": "Quaternius",
+        "pack": "universal-animation-library-2",
+        "source_clip": "ClimbUp_1m",
+        "license": "CC0"
+      }
+    },
+    "hit_heavy": {
+      "duration": 0.8333333333333334,
+      "contact_time": null,
+      "loop": false,
+      "provenance": {
+        "author": "Quaternius",
+        "pack": "universal-animation-library-2",
+        "source_clip": "Hit_Knockback",
+        "license": "CC0"
+      }
+    },
+    "sword_dash": {
+      "duration": 1.5666666666666667,
+      "contact_time": null,
+      "loop": false,
+      "provenance": {
+        "author": "Quaternius",
+        "pack": "universal-animation-library-2",
+        "source_clip": "Sword_Dash",
+        "license": "CC0"
+      }
+    },
+    "slide": {
+      "duration": 2.0,
+      "contact_time": null,
+      "loop": true,
+      "provenance": {
+        "author": "Quaternius",
+        "pack": "universal-animation-library-2",
+        "source_clip": "Slide_Loop",
+        "license": "CC0"
+      }
+    },
+    "consume": {
+      "duration": 1.3333333333333333,
+      "contact_time": null,
+      "loop": false,
+      "provenance": {
+        "author": "Quaternius",
+        "pack": "universal-animation-library-2",
+        "source_clip": "Consume",
+        "license": "CC0"
+      }
+    },
+    "sword_1": {
+      "duration": 0.8166666666666667,
+      "contact_time": 0.249166667,
+      "loop": false,
+      "provenance": {
+        "author": "Quaternius",
+        "pack": "universal-animation-library-2",
+        "source_clip": "Sword_Regular_Combo",
+        "license": "CC0",
+        "source_start": 0,
+        "source_end": 0.82,
+        "source_contact": 0.249166667
+      }
+    },
+    "sword_2": {
+      "duration": 0.6166666666666667,
+      "contact_time": 0.42583333300000004,
+      "loop": false,
+      "provenance": {
+        "author": "Quaternius",
+        "pack": "universal-animation-library-2",
+        "source_clip": "Sword_Regular_Combo",
+        "license": "CC0",
+        "source_start": 0.82,
+        "source_end": 1.43,
+        "source_contact": 1.245833333
+      }
+    },
+    "sword_3": {
+      "duration": 0.8166666666666667,
+      "contact_time": 0.14166666699999997,
+      "loop": false,
+      "provenance": {
+        "author": "Quaternius",
+        "pack": "universal-animation-library-2",
+        "source_clip": "Sword_Regular_Combo",
+        "license": "CC0",
+        "source_start": 1.43,
+        "source_end": 2.24,
+        "source_contact": 1.571666667
+      }
+    },
+    "great_1": {
+      "duration": 0.8166666666666667,
+      "contact_time": 0.5075,
+      "loop": false,
+      "provenance": {
+        "author": "Quaternius",
+        "pack": "universal-animation-library-2",
+        "source_clip": "Sword_Heavy_Combo",
+        "license": "CC0",
+        "source_start": 0,
+        "source_end": 0.82,
+        "source_contact": 0.5075
+      }
+    },
+    "great_2": {
+      "duration": 0.6333333333333333,
+      "contact_time": 0.3175,
+      "loop": false,
+      "provenance": {
+        "author": "Quaternius",
+        "pack": "universal-animation-library-2",
+        "source_clip": "Sword_Heavy_Combo",
+        "license": "CC0",
+        "source_start": 0.82,
+        "source_end": 1.46,
+        "source_contact": 1.1375
+      }
+    },
+    "great_3": {
+      "duration": 0.6666666666666666,
+      "contact_time": 0.32499999999999996,
+      "loop": false,
+      "provenance": {
+        "author": "Quaternius",
+        "pack": "universal-animation-library-2",
+        "source_clip": "Sword_Heavy_Combo",
+        "license": "CC0",
+        "source_start": 1.46,
+        "source_end": 2.13,
+        "source_contact": 1.785
+      }
+    },
+    "great_4": {
+      "duration": 1.5166666666666666,
+      "contact_time": 0.4950000000000001,
+      "loop": false,
+      "provenance": {
+        "author": "Quaternius",
+        "pack": "universal-animation-library-2",
+        "source_clip": "Sword_Heavy_Combo",
+        "license": "CC0",
+        "source_start": 2.13,
+        "source_end": 3.65,
+        "source_contact": 2.625
+      }
+    },
+    "rapier_1": {
+      "duration": 1.6,
+      "contact_time": 0.43333333333333335,
+      "loop": false,
+      "provenance": {
+        "author": "Kay Lousberg / KayKit",
+        "pack": "Character Pack Adventures1.0",
+        "source_clip": "1H_Melee_Attack_Stab",
+        "license": "CC0",
+        "retarget": "global rest-space orientation; fixed human bone lengths",
+        "variant": 1
+      },
+      "extension_peak_time": 0.7666666666666667,
+      "active_window": [
+        0.35,
+        0.5166666666666667
+      ],
+      "ready_time": 0,
+      "contact_note": "forward extension begins near .33; peak extension later is not impact onset"
+    },
+    "rapier_2": {
+      "duration": 1.6,
+      "contact_time": 0.43333333333333335,
+      "loop": false,
+      "provenance": {
+        "author": "Kay Lousberg / KayKit",
+        "pack": "Character Pack Adventures1.0",
+        "source_clip": "1H_Melee_Attack_Stab",
+        "license": "CC0",
+        "retarget": "global rest-space orientation; fixed human bone lengths",
+        "variant": 2
+      },
+      "extension_peak_time": 0.7666666666666667,
+      "active_window": [
+        0.35,
+        0.5166666666666667
+      ],
+      "ready_time": 0,
+      "contact_note": "forward extension begins near .33; peak extension later is not impact onset"
+    },
+    "rapier_3": {
+      "duration": 1.6,
+      "contact_time": 0.43333333333333335,
+      "loop": false,
+      "provenance": {
+        "author": "Kay Lousberg / KayKit",
+        "pack": "Character Pack Adventures1.0",
+        "source_clip": "1H_Melee_Attack_Stab",
+        "license": "CC0",
+        "retarget": "global rest-space orientation; fixed human bone lengths",
+        "variant": 3
+      },
+      "extension_peak_time": 0.6,
+      "active_window": [
+        0.35,
+        0.5166666666666667
+      ],
+      "ready_time": 0,
+      "contact_note": "forward extension begins near .33; peak extension later is not impact onset"
+    },
+    "rapier_4": {
+      "duration": 1.6,
+      "contact_time": 0.43333333333333335,
+      "loop": false,
+      "provenance": {
+        "author": "Kay Lousberg / KayKit",
+        "pack": "Character Pack Adventures1.0",
+        "source_clip": "1H_Melee_Attack_Stab",
+        "license": "CC0",
+        "retarget": "global rest-space orientation; fixed human bone lengths",
+        "variant": 4
+      },
+      "extension_peak_time": 0.7,
+      "active_window": [
+        0.35,
+        0.5166666666666667
+      ],
+      "ready_time": 0,
+      "contact_note": "forward extension begins near .33; peak extension later is not impact onset"
+    },
+    "rapier_idle": {
+      "duration": 1.0,
+      "contact_time": null,
+      "loop": true,
+      "provenance": {
+        "author": "Kay Lousberg / KayKit",
+        "pack": "Character Pack Adventures1.0",
+        "source_clip": "1H_Melee_Attack_Stab",
+        "license": "CC0",
+        "retarget": "global rest-space orientation; fixed human bone lengths",
+        "variant": "ready pose"
+      }
+    }
+  },
+  "socket": {
+    "bone": "hand_r",
+    "blender_hand_local_grip": [
+      0,
+      0.075,
+      0
+    ],
+    "blender_blade_axis": [
+      0,
+      0,
+      1
+    ],
+    "note": "Godot imported local bone axes require verification; see GodotProbe output"
+  },
+  "source": "Quaternius CC0 model/UAL, KayKit CC0 rapier authored stab",
+  "fps": 60,
+  "gltf_bytes": 5760588,
+  "socket_markers": {
+    "r": {
+      "matrix": [
+        [
+          1.0000001460462067,
+          1.6330503173256393e-07,
+          1.433223811788866e-07,
+          -5.523092452275336e-07
+        ],
+        [
+          2.9183339621535928e-08,
+          1.1533118184732038e-07,
+          -1.0000002355253195,
+          0.0750001552427052
+        ],
+        [
+          -1.7994123003877378e-07,
+          1.0000000946610526,
+          -1.0672451493615346e-08,
+          -4.958691565692952e-08
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "marker": "GripR",
+      "tip_marker": "GripTipR",
+      "blade_axis_local": [
+        0,
+        1,
+        0
+      ],
+      "hand_bone": "hand_r"
+    },
+    "l": {
+      "matrix": [
+        [
+          1.0000001251105675,
+          -7.867392372920662e-08,
+          6.906057404611504e-08,
+          -6.838781785312165e-08
+        ],
+        [
+          9.450708106443419e-09,
+          6.466432493971324e-08,
+          -1.0000000103059177,
+          0.07499993399616678
+        ],
+        [
+          2.8493878782097963e-08,
+          0.9999998997015724,
+          -1.0297474028742831e-07,
+          3.602986507755812e-08
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "marker": "GripL",
+      "tip_marker": "GripTipL",
+      "blade_axis_local": [
+        0,
+        1,
+        0
+      ],
+      "hand_bone": "hand_l"
+    }
+  },
+  "godot_animation_aliases": {
+    "jump_loop": "jump"
+  }
+}

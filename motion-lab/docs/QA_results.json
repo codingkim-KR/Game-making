@@ -1,0 +1,352 @@
+{
+	"details": {
+		"active_attack_direction_is_locked": 1.0,
+		"aerial_hit_landing_does_not_duplicate_damage": [
+			{
+				"attack_id": 17,
+				"damage": 18.0,
+				"direction": 1.0,
+				"ground_impact": false,
+				"kind": "air",
+				"position": "(1.0, 0.95, 0.0)",
+				"source": "@CharacterBody3D@11:<CharacterBody3D#26826769853>",
+				"strength": 1.0,
+				"weapon": 0
+			}
+		],
+		"air_dodge_lands": "",
+		"air_dodge_starts": "",
+		"attack_recovers_weapon_0": "idle",
+		"attack_recovers_weapon_1": "idle",
+		"attack_recovers_weapon_2": "idle",
+		"charge_cancels_into_dodge": "dodge",
+		"charge_changes_attack_strength": {
+			"charged": 70.4,
+			"tap": 44.8
+		},
+		"charged_attack_releases_one_hit": [
+			{
+				"attack_id": 15,
+				"damage": 70.4,
+				"direction": 1.0,
+				"ground_impact": false,
+				"kind": "strong",
+				"position": "(1.0, 0.95, 0.0)",
+				"source": "@CharacterBody3D@11:<CharacterBody3D#26826769853>",
+				"strength": 2.8875,
+				"weapon": 1
+			}
+		],
+		"combo_uses_unique_attack_ids_weapon_0": [
+			2,
+			3,
+			4
+		],
+		"combo_uses_unique_attack_ids_weapon_1": [
+			6,
+			7,
+			8,
+			9
+		],
+		"combo_uses_unique_attack_ids_weapon_2": [
+			11,
+			12,
+			13,
+			14
+		],
+		"coyote_jump_after_leaving_platform": {
+			"left": true,
+			"vy": 8.50000095367432
+		},
+		"dodge_window_avoids_damage": "",
+		"full_combo_weapon_0": {
+			"hits": 3,
+			"queued": [
+				0,
+				1
+			]
+		},
+		"full_combo_weapon_1": {
+			"hits": 4,
+			"queued": [
+				0,
+				1,
+				2
+			]
+		},
+		"full_combo_weapon_2": {
+			"hits": 4,
+			"queued": [
+				0,
+				1,
+				2
+			]
+		},
+		"greatsword_charge_accumulates": 0.750000000000001,
+		"greatsword_wire_light_preserves_attachment": "",
+		"greatsword_wire_strong_releases_and_attacks": "release",
+		"ground_contact": "",
+		"hero_has_authored_animation_bank": "",
+		"hero_has_real_skeleton": "",
+		"hurt_grace_prevents_duplicate_damage": "",
+		"landing_jump_buffer_executes_once": {
+			"vy": 7.30000114440918,
+			"y": 0.675897836685181
+		},
+		"landing_restores_air_dodge": "",
+		"lethal_hit_enters_death": "",
+		"live_skinned_hero_asset_present": "",
+		"midair_reversal_preserves_inertia": 5.0,
+		"movement_stays_in_sideview_plane": 0.0,
+		"no_unrequested_double_jump": [
+			1.36000037193298,
+			0.560000419616699
+		],
+		"rapier_can_attack_while_wire_attached": "wire",
+		"real_dummy_deduplicates_same_attack": "",
+		"real_dummy_reset_clears_hit_history": "",
+		"release_brakes_to_rest": 0.0,
+		"required_authored_clips_available": [],
+		"reset_into_air_does_not_reuse_stale_floor": "air",
+		"reset_restores_playable_state": {
+			"action": "idle",
+			"action_t": 0.25,
+			"air_dodges_left": 1,
+			"attack_active": 0.1,
+			"attack_charge": 0.0,
+			"attack_charged": false,
+			"attack_id": 21,
+			"attack_index": 0,
+			"attack_kind": "wire",
+			"attack_phase": "none",
+			"attack_progress": 0.0,
+			"attack_startup": 0.1,
+			"attack_total": 0.4,
+			"charge_advancing": false,
+			"charge_ratio": 0.0,
+			"climb_duration": 0.6,
+			"climb_progress": 0.0,
+			"dodge_air": false,
+			"facing": 1.0,
+			"grounded": true,
+			"health": 100.0,
+			"hitstop": false,
+			"land_weight": 0.0,
+			"ledge_grip": "(0.0, 0.0, 0.0)",
+			"motion_label": "준비",
+			"parry_success_time": 0.0,
+			"plunge_landed": false,
+			"plunge_recovery_t": 0.0,
+			"rope_anchor": "(5.0, 12.0, 0.0)",
+			"rope_connected": false,
+			"rope_length": 4.54016780853271,
+			"rope_taut": false,
+			"turn_input": 0.0,
+			"velocity": "(0.0, 0.0, 0.0)",
+			"walking": false,
+			"wall_dir": 0.0,
+			"weapon": 2
+		},
+		"reversal_brakes_without_instant_velocity_flip": [
+			5.80000019073486,
+			4.88333368301392
+		],
+		"reversal_finishes_left": "(-5.8, 0.0, 0.0)",
+		"run_moves_player": 2.54666662216187,
+		"second_air_dodge_rejected": "",
+		"single_hit_dedup_weapon_0": [
+			{
+				"attack_id": 1,
+				"damage": 18.0,
+				"direction": 1.0,
+				"ground_impact": false,
+				"kind": "ground",
+				"position": "(1.0, 0.95, 0.0)",
+				"source": "@CharacterBody3D@11:<CharacterBody3D#26826769853>",
+				"strength": 1.0,
+				"weapon": 0
+			}
+		],
+		"single_hit_dedup_weapon_1": [
+			{
+				"attack_id": 5,
+				"damage": 32.0,
+				"direction": 1.0,
+				"ground_impact": false,
+				"kind": "ground",
+				"position": "(1.0, 0.95, 0.0)",
+				"source": "@CharacterBody3D@11:<CharacterBody3D#26826769853>",
+				"strength": 1.65,
+				"weapon": 1
+			}
+		],
+		"single_hit_dedup_weapon_2": [
+			{
+				"attack_id": 10,
+				"damage": 11.0,
+				"direction": 1.0,
+				"ground_impact": false,
+				"kind": "ground",
+				"position": "(1.0, 0.95, 0.0)",
+				"source": "@CharacterBody3D@11:<CharacterBody3D#26826769853>",
+				"strength": 0.65,
+				"weapon": 2
+			}
+		],
+		"timed_guard_parries_front_hit": {
+			"hp": 100.0,
+			"notices": []
+		},
+		"unprotected_hit_damages_player": [
+			100.0,
+			80.0
+		],
+		"variable_jump_height": {
+			"hold": 1.72582721710205,
+			"tap": 0.709026992321014
+		},
+		"walk_distinct_from_run": {
+			"run": 2.54666662216187,
+			"walk": 0.543333411216736
+		},
+		"wall_contact_above_ground": {
+			"position": "(9.759065, 1.950001, 0.0)",
+			"velocity": "(0.0, -1.55, 0.0)"
+		},
+		"wall_kick_initial_outward_push_protected": -6.30000019073486,
+		"wall_kick_moves_away_and_up": "(-6.3, 8.000001, 0.0)",
+		"wall_slide_limits_descent": -1.54999995231628,
+		"weapon_and_wire_hand_bones_available": "",
+		"weapon_damage_profiles_differ": [
+			18.0,
+			32.0,
+			11.0
+		],
+		"weapon_swap_does_not_cancel_active_attack": 1,
+		"weapon_swap_executes_after_recovery": 2,
+		"wire_attaches_to_anchor": "(4.0, 6.0, 0.0)",
+		"wire_constraint_bounds_swing_radius": {
+			"initial": 3.85507464408875,
+			"max": 4.43323516845703
+		},
+		"wire_does_not_refill_air_dodge": "",
+		"wire_jump_releases": "",
+		"wire_release_does_not_grant_extra_jump_impulse": {
+			"after": "(5.759897, -5.979147, 0.0)",
+			"before": "(6.426564, -5.179147, 0.0)"
+		}
+	},
+	"engine": "4.6.3-stable (official)",
+	"failures": [],
+	"passed": [
+		"ground_contact",
+		"run_moves_player",
+		"reversal_brakes_without_instant_velocity_flip",
+		"reversal_finishes_left",
+		"release_brakes_to_rest",
+		"walk_distinct_from_run",
+		"movement_stays_in_sideview_plane",
+		"variable_jump_height",
+		"no_unrequested_double_jump",
+		"midair_reversal_preserves_inertia",
+		"coyote_jump_after_leaving_platform",
+		"landing_jump_buffer_executes_once",
+		"air_dodge_starts",
+		"second_air_dodge_rejected",
+		"air_dodge_lands",
+		"landing_restores_air_dodge",
+		"wall_contact_above_ground",
+		"wall_slide_limits_descent",
+		"wall_kick_moves_away_and_up",
+		"wall_kick_initial_outward_push_protected",
+		"single_hit_dedup_weapon_0",
+		"attack_recovers_weapon_0",
+		"full_combo_weapon_0",
+		"combo_uses_unique_attack_ids_weapon_0",
+		"single_hit_dedup_weapon_1",
+		"attack_recovers_weapon_1",
+		"full_combo_weapon_1",
+		"combo_uses_unique_attack_ids_weapon_1",
+		"single_hit_dedup_weapon_2",
+		"attack_recovers_weapon_2",
+		"full_combo_weapon_2",
+		"combo_uses_unique_attack_ids_weapon_2",
+		"weapon_damage_profiles_differ",
+		"greatsword_charge_accumulates",
+		"charged_attack_releases_one_hit",
+		"charge_changes_attack_strength",
+		"charge_cancels_into_dodge",
+		"reset_into_air_does_not_reuse_stale_floor",
+		"aerial_hit_landing_does_not_duplicate_damage",
+		"active_attack_direction_is_locked",
+		"weapon_swap_does_not_cancel_active_attack",
+		"weapon_swap_executes_after_recovery",
+		"wire_attaches_to_anchor",
+		"wire_constraint_bounds_swing_radius",
+		"wire_jump_releases",
+		"wire_release_does_not_grant_extra_jump_impulse",
+		"greatsword_wire_light_preserves_attachment",
+		"greatsword_wire_strong_releases_and_attacks",
+		"rapier_can_attack_while_wire_attached",
+		"wire_does_not_refill_air_dodge",
+		"unprotected_hit_damages_player",
+		"hurt_grace_prevents_duplicate_damage",
+		"timed_guard_parries_front_hit",
+		"dodge_window_avoids_damage",
+		"lethal_hit_enters_death",
+		"reset_restores_playable_state",
+		"real_dummy_deduplicates_same_attack",
+		"real_dummy_reset_clears_hit_history",
+		"live_skinned_hero_asset_present",
+		"hero_has_real_skeleton",
+		"hero_has_authored_animation_bank",
+		"required_authored_clips_available",
+		"weapon_and_wire_hand_bones_available"
+	],
+	"platform": "Linux",
+	"scope": "Actual Godot headless 3D physics and controller, controlled fixtures. No rendered-image or Windows-execution claim.",
+	"visual_assets": {
+		"animations": [
+			"climb",
+			"consume",
+			"crouch",
+			"death",
+			"great_1",
+			"great_2",
+			"great_3",
+			"great_4",
+			"great_combo",
+			"guard",
+			"hit",
+			"hit_head",
+			"hit_heavy",
+			"idle",
+			"interact",
+			"jump",
+			"jump_land",
+			"jump_start",
+			"rapier_1",
+			"rapier_2",
+			"rapier_3",
+			"rapier_4",
+			"rapier_idle",
+			"roll",
+			"run",
+			"slide",
+			"sprint",
+			"sword_1",
+			"sword_2",
+			"sword_3",
+			"sword_a",
+			"sword_a_recover",
+			"sword_b",
+			"sword_b_recover",
+			"sword_c",
+			"sword_combo",
+			"sword_dash",
+			"sword_idle",
+			"walk"
+		],
+		"bones": 65
+	}
+}

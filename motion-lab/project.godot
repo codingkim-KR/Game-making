@@ -1,0 +1,21 @@
+config_version=5
+[application]
+config/name="검은 성전 · 전환 모션 테스트 v0.5.1"
+config/description="일반검 대검 세검 · 실제 골격 모션 · 이동 벽 와이어 전투 테스트"
+run/main_scene="res://scenes/main.tscn"
+config/features=PackedStringArray("4.6", "GL Compatibility")
+[display]
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/size/window_width_override=1280
+window/size/window_height_override=720
+window/stretch/mode="canvas_items"
+window/vsync/vsync_mode=1
+[physics]
+common/physics_ticks_per_second=60
+[rendering]
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/default_filters/use_nearest_mipmap_filter=false
+anti_aliasing/quality/msaa_3d=1
+environment/defaults/default_clear_color=Color(0.025,0.041,0.065,1)

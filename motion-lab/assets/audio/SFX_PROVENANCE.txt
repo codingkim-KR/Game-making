@@ -1,0 +1,11 @@
+Authored SFX by Kenney (www.kenney.nl), Creative Commons Zero (CC0).
+Official source pages:
+https://kenney.nl/assets/impact-sounds
+https://kenney.nl/assets/rpg-audio
+Retrieved from each official page's free download flow on 2026-11-15. No account or payment.
+Included license text was inspected and retained. Attribution is optional; source records are retained here for provenance.
+Selected WAVs are edited derivatives of the specified original OGG files: silence trimmed, mono 48 kHz decode, peak normalized to 0.8, 2 ms edge fades. No synthesized sounds are included.
+The full downloaded packs are retained outside this selected folder; only this folder is needed in the user deliverable.
+Time the wood/metal impact file start at impact (peak approximately 3-5 ms later).
+Sword whoosh A peaks ~0.16 seconds after its file start. Align its peak slightly before visible contact rather than starting it at the contact frame.
+The audio was decoded and checked numerically (duration, peak, onset, nonzero signal); playback timbre still needs final editorial listening with the rendered motion.
